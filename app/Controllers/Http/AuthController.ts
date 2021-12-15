@@ -31,4 +31,10 @@ export default class AuthController {
 
     return token;
   }
+
+  public async logout({ auth, response }: HttpContextContract) {
+    await auth.use("api").revoke();
+
+    return response.status(204);
+  }
 }
