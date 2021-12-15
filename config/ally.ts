@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { AllyConfig } from '@ioc:Adonis/Addons/Ally'
+import Env from "@ioc:Adonis/Core/Env";
+import { AllyConfig } from "@ioc:Adonis/Addons/Ally";
 
 /*
 |--------------------------------------------------------------------------
@@ -18,28 +18,28 @@ import { AllyConfig } from '@ioc:Adonis/Addons/Ally'
 |
 */
 const allyConfig: AllyConfig = {
-	/*
+  /*
 	|--------------------------------------------------------------------------
 	| Github driver
 	|--------------------------------------------------------------------------
 	*/
-	github: {
-		driver: 'github',
-		clientId: Env.get('GITHUB_CLIENT_ID'),
-		clientSecret: Env.get('GITHUB_CLIENT_SECRET'),
-		callbackUrl: 'http://localhost:3333/github/callback',
-	},
-	/*
+  github: {
+    driver: "github",
+    clientId: Env.get("GITHUB_CLIENT_ID"),
+    clientSecret: Env.get("GITHUB_CLIENT_SECRET"),
+    callbackUrl: "http://localhost:3333/github/callback",
+  },
+  /*
 	|--------------------------------------------------------------------------
 	| Google driver
 	|--------------------------------------------------------------------------
 	*/
-	google: {
-		driver: 'google',
-		clientId: Env.get('GOOGLE_CLIENT_ID'),
-		clientSecret: Env.get('GOOGLE_CLIENT_SECRET'),
-		callbackUrl: 'http://localhost:3333/google/callback',
-	},
-}
+  google: {
+    driver: "google",
+    clientId: Env.get("GOOGLE_CLIENT_ID"),
+    clientSecret: Env.get("GOOGLE_CLIENT_SECRET"),
+    callbackUrl: Env.get("GOOGLE_CALLBACK_URL"),
+  },
+};
 
-export default allyConfig
+export default allyConfig;
