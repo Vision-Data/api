@@ -1,3 +1,4 @@
+import Ws from "App/Services/Ws";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import User from "App/Models/User";
 
@@ -28,6 +29,8 @@ export default class AuthController {
     );
 
     const token = await auth.use("api").generate(user, { expiresIn: "1hour" });
+
+    Ws.io.emit("login", token);
 
     return token;
   }
