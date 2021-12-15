@@ -25,7 +25,7 @@ jobs:
             npm ci
 
             # Build the API
-            node ace build --production
+            node ace build --production --ignore-ts-errors
             cp .env build/.env
             cd build
             npm ci --production
