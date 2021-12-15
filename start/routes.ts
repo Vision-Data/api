@@ -18,8 +18,9 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from "@ioc:Adonis/Core/Route";
 
-Route.get('/', async () => {
-  return { hello: 'world <3' }
-})
+Route.get("auth/:provider", "AuthController.redirectToProvider");
+Route.get("/:provider/callback", "AuthController.handleProviderCallback");
+
+Route.post("logout", "AuthController.logout").middleware("auth");
