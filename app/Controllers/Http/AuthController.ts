@@ -6,7 +6,11 @@ export default class AuthController {
     return ally.use(params.provider).redirect();
   }
 
-  public async handleProviderCallback({ params, ally }: HttpContextContract) {
+  public async handleProviderCallback({
+    params,
+    ally,
+    auth,
+  }: HttpContextContract) {
     const provider = ally.use(params.provider);
     const userData = await provider.user();
 
@@ -23,6 +27,8 @@ export default class AuthController {
       }
     );
 
-    return user;
+    const token = await auth.use("api").generate(user, { expiresIn: "1hour" });
+
+    return token;
   }
 }

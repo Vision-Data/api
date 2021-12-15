@@ -18,7 +18,7 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from "@ioc:Adonis/Core/Route";
 
-Route.get('auth/:provider', 'AuthController.redirectToProvider')
-Route.get('/:provider/callback', 'AuthController.handleProviderCallback')
+Route.get("auth/:provider", "AuthController.redirectToProvider");
+Route.get("/:provider/callback", "AuthController.handleProviderCallback");
