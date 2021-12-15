@@ -11,7 +11,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -23,17 +23,17 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
             git pull origin main
             npm ci
-            
+
             # Build the API
             node ace build --production
             cp .env build/.env
             cd build
             npm ci --production
-            
+
             # Run migrations & seeds
-            #node ace migration:run --force
+            node ace migration:run --force
             #node ace db:seed --force
-            
+
             # Restart server 
             pm2 delete api-vision
             pm2 start server.js --name api-vision
