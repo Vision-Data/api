@@ -19,6 +19,7 @@ export default class AuthController {
     const user = await User.firstOrCreate(
       {
         email: userData.email,
+        provider: params.provider,
       },
       {
         email: userData.email,
