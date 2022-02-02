@@ -14,8 +14,6 @@
         schema:
           type: string
           example: google
-    produces:
-      - application/json
     responses:
       200:
         description: Successful login or registration.
@@ -36,8 +34,6 @@
     description: Logout the current user.
     summary: Logout the current user.
     operationId: logout
-    produces:
-      - application/json
     responses:
       200:
         description: Successful logout.
