@@ -27,6 +27,10 @@ jobs:
             # Build the API
             node ace build --production --ignore-ts-errors
             cp .env build/.env
+            # Build the API documentation
+            node ace swagger:generate && cp -a docs/ build/docs
+
+            # Install dependencies for build
             cd build
             npm ci --production
 
