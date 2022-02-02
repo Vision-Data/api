@@ -1,38 +1,28 @@
-import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
-import { v4 as uuid } from 'uuid'
-
+import { DateTime } from "luxon";
+import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: string;
 
   @column()
-  public email: String
+  public email: string;
 
   @column()
-  public password: String
+  public password: string;
 
   @column()
-  public fullName: String
+  public fullName: string;
 
   @column()
-  public providerId: String
-  
+  public providerId: string;
+
   @column()
-  public provider: String
-  
-  @column()
-  public uuid: String
+  public provider: string;
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
-
-  @beforeCreate()
-  public static async generateUuid(user: User) {
-    user.uuid = uuid()
-  }
+  public updatedAt: DateTime;
 }
