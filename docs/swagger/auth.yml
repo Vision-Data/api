@@ -1,0 +1,93 @@
+/auth/{provider}:
+  get:
+    tags:
+      - Auth
+    security: []
+    description: Login or register with a third-party provider.
+    summary: Login or register with a third-party provider.
+    operationId: login
+    parameters:
+      - name: provider
+        in: path
+        description: The name of the provider. `google` or `github`
+        required: true
+        schema:
+          type: string
+          example: google
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Successful login or registration.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Auth"
+      400:
+        description: Invalid request.
+      500:
+        description: Internal server error.
+
+/logout:
+  post:
+    tags:
+      - Auth
+    security: []
+    description: Logout the current user.
+    summary: Logout the current user.
+    operationId: logout
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Successful logout.
+        content:
+          application/json:
+            example:
+              revoked: true
+      400:
+        description: Invalid request.
+      401:
+        description: Unauthorized.
+      500:
+        description: Internal server error.
+
+components:
+  schemas:
+    Auth:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The JWT token.
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The user's unique identifier.
+          example: 5f1d7999-05d2-4b45-94bb-126bd27a5011
+        email:
+          type: string
+          description: The user's email address.
+          example: john@doe.com
+        fullName:
+          type: string
+          description: The user's full name.
+          example: John Doe
+        avatarUrl:
+          type: string
+          description: The user's avatar URL.
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time the user was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time the user was last updated.
