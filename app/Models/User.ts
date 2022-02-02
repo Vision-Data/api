@@ -8,17 +8,20 @@ export default class User extends BaseModel {
   @column()
   public email: string;
 
-  @column()
+  @column({ serializeAs: null })
   public password: string;
 
   @column()
   public fullName: string;
 
-  @column()
+  @column({ serializeAs: null })
   public providerId: string;
 
-  @column()
+  @column({ serializeAs: null })
   public provider: string;
+
+  @column()
+  public avatarUrl: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

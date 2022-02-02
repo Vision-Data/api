@@ -26,14 +26,16 @@ export default class AuthController {
         fullName: userData.nickName,
         provider: params.provider,
         providerId: userData.id,
+        avatarUrl: userData.avatarUrl,
       }
     );
 
     const token = await auth.use("api").generate(user, { expiresIn: "1hour" });
+    const tokenAndUserInformations = { token: token.token, user: token.user };
 
-    Ws.io.emit("login", token);
+    Ws.io.emit("login", tokenAndUserInformations);
 
-    return token;
+    return tokenAndUserInformations;
   }
 
   public async logout({ auth, response }: HttpContextContract) {
