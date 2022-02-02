@@ -26,6 +26,7 @@ export default class AuthController {
         fullName: userData.nickName,
         provider: params.provider,
         providerId: userData.id,
+        avatarUrl: userData.avatarUrl,
       }
     );
 
