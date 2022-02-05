@@ -5,7 +5,7 @@ on:
 
 jobs:
   tests:
-    name: "🧪 Tests"
+    name: "🧪 - Tests"
     runs-on: ubuntu-latest
     strategy:
       matrix:
