@@ -7,3 +7,4 @@ coverage
 .env.testing
 tmp
 docs/swagger.json
+.nyc_output
