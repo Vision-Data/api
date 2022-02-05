@@ -8,7 +8,7 @@ export default class Users extends BaseSchema {
       table
         .uuid("id")
         .primary()
-        .defaultTo(this.db.rawQuery("uuid_generate_v4()").knexQuery);
+        .defaultTo(this.db.rawQuery("gen_random_uuid()").knexQuery);
 
       table.string("email").notNullable();
       table.string("password");
