@@ -4,5 +4,7 @@ coverage
 .vscode
 .DS_STORE
 .env
+.env.testing
 tmp
 docs/swagger.json
+.nyc_output
