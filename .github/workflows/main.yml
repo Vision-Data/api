@@ -5,7 +5,7 @@ on:
 
 jobs:
   tests:
-    name: "🧪 Tests"
+    name: "🧪 - Tests"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,6 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run coverage
         env:
+          PORT: 3000
           HOST: 0.0.0.0
           NODE_ENV: testing
           PG_HOST: localhost
