@@ -2,6 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)
 [![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://api.vision-data.io/docs)
+[![Build, test and deploy](https://github.com/Vision-Data/api/actions/workflows/main.yml/badge.svg)](https://github.com/Vision-Data/api/actions/workflows/main.yml)
 
 This API is built using AdonisJS.
 
