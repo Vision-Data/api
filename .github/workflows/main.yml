@@ -1,11 +1,43 @@
 name: Build, test and deploy
 on:
-  repository_dispatch:
-    types: [ci_cd]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
   tests:
     name: "🧪 - Tests"
+    needs: [analyze]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -54,7 +86,7 @@ jobs:
     if: github.event_name != 'pull_request'
     name: "🚀 - Deploy"
     runs-on: ubuntu-latest
-    needs: [tests]
+    needs: [analyze, tests]
     environment:
       name: production
       url: "https://api.vision-data.io"
