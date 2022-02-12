@@ -3,7 +3,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class DeleteToken extends BaseTask {
   public static get schedule() {
-    return '5 * * * * *'
+    return '*/5 * * * *'
   }
   /**
    * Set enable use .lock file for block run retry task
