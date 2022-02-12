@@ -1,4 +1,4 @@
-import { ApplicationContract } from "@ioc:Adonis/Core/Application";
+import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
@@ -12,9 +12,13 @@ export default class AppProvider {
   }
 
   public async ready() {
-    if (this.app.environment === "web") {
-      await import("../start/socket");
+    if (this.app.environment === 'web') {
+      await import('../start/socket')
     }
+
+    // Run scheduler at startup
+    const scheduler = this.app.container.use('Adonis/Addons/Scheduler')
+    scheduler.run()
   }
 
   public async shutdown() {
