@@ -20,9 +20,34 @@
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Auth"
+              $ref: '#/components/schemas/Auth'
       400:
         description: Invalid request.
+      500:
+        description: Internal server error.
+
+/register:
+  post:
+    tags:
+      - Auth
+    security: []
+    description: Register a new user.
+    summary: Register a new user.
+    operationId: register
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Register'
+    responses:
+      200:
+        description: Successful registration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+      422:
+        description: Validation error.
       500:
         description: Internal server error.
 
@@ -35,7 +60,7 @@
     summary: Logout the current user.
     operationId: logout
     responses:
-      200:
+      204:
         description: Successful logout.
         content:
           application/json:
@@ -58,7 +83,7 @@ components:
           description: The JWT token.
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
         user:
-          $ref: "#/components/schemas/User"
+          $ref: '#/components/schemas/User'
 
     User:
       type: object
@@ -87,3 +112,19 @@ components:
           type: string
           format: date-time
           description: The date and time the user was last updated.
+
+    Register:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address.
+          example: john@doe.com
+        full_name:
+          type: string
+          description: The user's full name.
+          example: John Doe
+        password:
+          type: string
+          description: The user's password.
+          example: supersecretpassword

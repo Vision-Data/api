@@ -1,10 +1,11 @@
-import Ws from "App/Services/Ws";
-import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import User from "App/Models/User";
+import Ws from 'App/Services/Ws'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import User from 'App/Models/User'
+import CreateUserValidator from 'App/Validators/CreateUserValidator'
 
 export default class AuthController {
   public async redirectToProvider({ params, ally }: HttpContextContract) {
-    return ally.use(params.provider).redirect();
+    return ally.use(params.provider).redirect()
   }
 
   public async handleProviderCallback({
@@ -12,8 +13,8 @@ export default class AuthController {
     ally,
     auth,
   }: HttpContextContract) {
-    const provider = ally.use(params.provider);
-    const userData = await provider.user();
+    const provider = ally.use(params.provider)
+    const userData = await provider.user()
 
     // Get user or create them
     const user = await User.firstOrCreate(
@@ -28,19 +29,27 @@ export default class AuthController {
         providerId: userData.id,
         avatarUrl: userData.avatarUrl,
       }
-    );
+    )
 
-    const token = await auth.use("api").generate(user, { expiresIn: "1hour" });
-    const tokenAndUserInformations = { token: token.token, user: token.user };
+    const token = await auth.use('api').generate(user, { expiresIn: '1hour' })
+    const tokenAndUserInformations = { token: token.token, user: token.user }
 
-    Ws.io.emit("login", tokenAndUserInformations);
+    Ws.io.emit('login', tokenAndUserInformations)
 
-    return tokenAndUserInformations;
+    return tokenAndUserInformations
+  }
+
+  public async register({ request, auth }: HttpContextContract) {
+    const payload = await request.validate(CreateUserValidator)
+    const user = await User.create(payload)
+
+    const token = await auth.use('api').generate(user, { expiresIn: '1hour' })
+    return { token: token.token, user }
   }
 
   public async logout({ auth, response }: HttpContextContract) {
-    await auth.use("api").revoke();
+    await auth.use('api').revoke()
 
-    return response.status(204);
+    return response.status(204)
   }
 }
