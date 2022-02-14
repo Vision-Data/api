@@ -13,5 +13,11 @@ export default class CreateUserValidator {
     password: schema.string({}, [rules.minLength(8)]),
   })
 
-  public messages = {}
+  public messages = {
+    required: '{{ field }} is required',
+    minLength:
+      '{{ field }} must be at least {{ options.minLength }} characters',
+    'email.unique': 'This email already exists',
+    email: 'Invalid email',
+  }
 }
