@@ -94,3 +94,62 @@ test.group('Register', (group) => {
     ])
   })
 })
+
+test.group('Login', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('it should return that email is not an email', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL).post('/login').send({
+      email: 'joh',
+      password: '12345678',
+    })
+
+    assert.equal(statusCode, 422)
+    assert.equal(body.errors[0].message, 'Invalid email')
+  })
+
+  test("it should return that email doesn't exists", async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL).post('/login').send({
+      email: 'fake@gmail.com',
+      password: '13303uieo',
+    })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'User account with this email does not exist'
+    )
+  })
+
+  test('it should login successfuly', async (assert) => {
+    const user = {
+      full_name: 'John doe',
+      email: 'john@doe.com',
+      password: '2033003003030LFJLEFJ',
+    }
+
+    await createUser(user)
+
+    const { body, statusCode } = await supertest(BASE_URL).post('/login').send({
+      email: user.email,
+      password: user.password,
+    })
+
+    assert.equal(statusCode, 200)
+    assert.hasAllKeys(body, ['token', 'user'])
+    assert.hasAllDeepKeys(body.user, [
+      'id',
+      'full_name',
+      'email',
+      'created_at',
+      'updated_at',
+      'avatar_url',
+    ])
+  })
+})

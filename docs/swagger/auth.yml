@@ -2,10 +2,9 @@
   get:
     tags:
       - Auth
-    security: []
     description: Login or register with a third-party provider.
     summary: Login or register with a third-party provider.
-    operationId: login
+    operationId: auth
     parameters:
       - name: provider
         in: path
@@ -30,7 +29,6 @@
   post:
     tags:
       - Auth
-    security: []
     description: Register a new user.
     summary: Register a new user.
     operationId: register
@@ -42,6 +40,30 @@
     responses:
       200:
         description: Successful registration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+      422:
+        description: Validation error.
+      500:
+        description: Internal server error.
+
+/login:
+  post:
+    tags:
+      - Auth
+    description: Login a user.
+    summary: Login a user.
+    operationId: login
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Login'
+    responses:
+      200:
+        description: Successful login.
         content:
           application/json:
             schema:
@@ -124,6 +146,18 @@ components:
           type: string
           description: The user's full name.
           example: John Doe
+        password:
+          type: string
+          description: The user's password.
+          example: supersecretpassword
+
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address.
+          example: john@doe.com
         password:
           type: string
           description: The user's password.
