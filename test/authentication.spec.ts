@@ -90,6 +90,7 @@ test.group('Register', (group) => {
       'email',
       'created_at',
       'updated_at',
+      'avatar_url',
     ])
   })
 })

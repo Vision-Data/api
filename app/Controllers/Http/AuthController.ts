@@ -2,6 +2,7 @@ import Ws from 'App/Services/Ws'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import CreateUserValidator from 'App/Validators/CreateUserValidator'
+import LoginValidator from 'App/Validators/LoginValidator'
 
 export default class AuthController {
   public async redirectToProvider({ params, ally }: HttpContextContract) {
@@ -43,8 +44,19 @@ export default class AuthController {
     const payload = await request.validate(CreateUserValidator)
     const user = await User.create(payload)
 
-    const token = await auth.use('api').generate(user, { expiresIn: '1hour' })
-    return { token: token.token, user }
+    const token = await auth.attempt(user.email, payload.password, {
+      expiresIn: '1hour',
+    })
+    return { token: token.token, user: token.user }
+  }
+
+  public async login({ request, auth }: HttpContextContract) {
+    const payload = await request.validate(LoginValidator)
+    const token = await auth.attempt(payload.email, payload.password, {
+      expiresIn: '1hour',
+    })
+
+    return { token: token.token, user: token.user }
   }
 
   public async logout({ auth, response }: HttpContextContract) {
