@@ -68,6 +68,8 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Auth'
+      400:
+        description: Invalid request.
       422:
         description: Validation error.
       500:

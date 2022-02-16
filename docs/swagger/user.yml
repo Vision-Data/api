@@ -1,0 +1,48 @@
+/users/me:
+  get:
+    tags:
+      - Users
+    description: Get the current user
+    summary: Get the current user
+    operationId: getMe
+    responses:
+      200:
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      401:
+        description: Unauthorized
+      500:
+        description: Internal Server Error
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The user's id
+          example: 12334-1234-1234-1234
+        email:
+          type: string
+          description: The user's email address
+          example: john@doe.com
+        full_name:
+          type: string
+          description: The user's full name
+          example: John Doe
+        created_at:
+          type: string
+          description: The user's created at date
+          example: 2020-08-20T12:00:00.000Z
+        updated_at:
+          type: string
+          description: The user's updated at date
+          example: 2020-08-20T12:00:00.000Z
+        avatar_url:
+          type: string
+          description: The user's avatar url
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
