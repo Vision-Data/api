@@ -32,6 +32,7 @@ Route.post('logout', 'AuthController.logout').middleware('auth')
 /* Users */
 Route.group(() => {
   Route.get('/me', 'UsersController.show')
+  Route.put('/me', 'UsersController.update')
 })
   .prefix('/users')
   .middleware('auth')

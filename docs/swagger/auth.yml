@@ -46,6 +46,10 @@
               $ref: '#/components/schemas/Auth'
       422:
         description: Validation error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
       500:
         description: Internal server error.
 
@@ -72,6 +76,10 @@
         description: Invalid request.
       422:
         description: Validation error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
       500:
         description: Internal server error.
 
@@ -104,7 +112,7 @@ components:
       properties:
         token:
           type: string
-          description: The JWT token.
+          description: The token.
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
         user:
           $ref: '#/components/schemas/User'
@@ -164,3 +172,27 @@ components:
           type: string
           description: The user's password.
           example: supersecretpassword
+
+    ValidationError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationErrorItem'
+
+    ValidationErrorItem:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The field that failed validation
+          example: email
+        message:
+          type: string
+          description: The error message
+          example: is required
+        rule:
+          type: string
+          description: The rule that failed validation
+          example: required

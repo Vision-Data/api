@@ -26,7 +26,7 @@ test.group('Register', (group) => {
     assert.equal(statusCode, 422)
     assert.equal(
       body.errors[0].message,
-      'full_name must be at least 4 characters'
+      'This field must be at least 4 characters'
     )
   })
 
@@ -72,7 +72,7 @@ test.group('Register', (group) => {
     assert.equal(statusCode, 422)
     assert.equal(
       body.errors[0].message,
-      'password must be at least 8 characters'
+      'This field must be at least 8 characters'
     )
   })
 
