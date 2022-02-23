@@ -13,12 +13,13 @@ export default class LoginValidator {
         where: { provider: null },
       }),
     ]),
-    password: schema.string({}),
+    password: schema.string({}, [rules.minLength(8), rules.maxLength(30)]),
   })
 
   public messages = {
     required: '{{ field }} is required',
     email: 'Invalid email',
     'email.exists': 'User account with this email does not exist',
+    maxLength: 'This field must be at most {{ options.maxLength }} characters',
   }
 }

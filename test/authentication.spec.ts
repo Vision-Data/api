@@ -2,6 +2,7 @@ import { createUser } from './utils'
 import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
+import faker from 'faker'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 
@@ -27,6 +28,22 @@ test.group('Register', (group) => {
     assert.equal(
       body.errors[0].message,
       'This field must be at least 4 characters'
+    )
+  })
+
+  test('it should return that fullname is too long', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post('/register')
+      .send({
+        full_name: faker.lorem.words(50),
+        email: 'john@doe.com',
+        password: '12345678',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at most 50 characters'
     )
   })
 
@@ -73,6 +90,22 @@ test.group('Register', (group) => {
     assert.equal(
       body.errors[0].message,
       'This field must be at least 8 characters'
+    )
+  })
+
+  test('it should return that password is too long', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post('/register')
+      .send({
+        full_name: 'John doe',
+        email: 'john@doe.com',
+        password: faker.lorem.words(50),
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at most 30 characters'
     )
   })
 
@@ -124,6 +157,29 @@ test.group('Login', (group) => {
     assert.equal(
       body.errors[0].message,
       'User account with this email does not exist'
+    )
+  })
+
+  test('it should return that password is too long', async (assert) => {
+    const user = {
+      full_name: 'John doe',
+      email: 'john@doe.com',
+      password: '2033003003030LFJLEFJ',
+    }
+
+    await createUser(user)
+
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post('/login')
+      .send({
+        email: 'john@doe.com',
+        password: faker.lorem.words(100),
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at most 30 characters'
     )
   })
 

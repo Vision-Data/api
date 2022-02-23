@@ -2,6 +2,7 @@ import { login, createUser } from './utils'
 import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
+import faker from 'faker'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 let user
@@ -56,6 +57,23 @@ test.group('Update user profile', (group) => {
     assert.equal(
       body.errors[0].message,
       'This field must be at least 4 characters'
+    )
+  })
+
+  test('it should return that fullname is too long', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .put('/users/me')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        full_name: faker.lorem.words(50),
+        email: 'john@doe.com',
+        avatar_url: 'https://img.com',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at most 50 characters'
     )
   })
 
