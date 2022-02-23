@@ -18,9 +18,21 @@
 |
 */
 
-import Route from "@ioc:Adonis/Core/Route";
+import Route from '@ioc:Adonis/Core/Route'
 
-Route.get("/auth/:provider", "AuthController.redirectToProvider");
-Route.get("/:provider/callback", "AuthController.handleProviderCallback");
+/* Authentication */
+Route.get('/auth/:provider', 'AuthController.redirectToProvider')
+Route.get('/:provider/callback', 'AuthController.handleProviderCallback')
 
-Route.post("logout", "AuthController.logout").middleware("auth");
+Route.post('/register', 'AuthController.register')
+Route.post('/login', 'AuthController.login')
+
+Route.post('logout', 'AuthController.logout').middleware('auth')
+
+/* Users */
+Route.group(() => {
+  Route.get('/me', 'UsersController.show')
+  Route.put('/me', 'UsersController.update')
+})
+  .prefix('/users')
+  .middleware('auth')
