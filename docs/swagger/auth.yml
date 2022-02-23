@@ -44,6 +44,8 @@
           application/json:
             schema:
               $ref: '#/components/schemas/Auth'
+      400:
+        description: Error during register/login.
       422:
         description: Validation error.
         content:
