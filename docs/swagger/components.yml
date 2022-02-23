@@ -1,0 +1,107 @@
+components:
+  schemas:
+    Auth:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The token.
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The user's unique identifier.
+          example: 5f1d7999-05d2-4b45-94bb-126bd27a5011
+        email:
+          type: string
+          description: The user's email address.
+          example: john@doe.com
+        full_name:
+          type: string
+          description: The user's full name.
+          example: John Doe
+        avatar_url:
+          type: string
+          description: The user's avatar URL.
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the user was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the user was last updated.
+
+    Register:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address.
+          example: john@doe.com
+        full_name:
+          type: string
+          description: The user's full name.
+          example: John Doe
+        password:
+          type: string
+          description: The user's password.
+          example: supersecretpassword
+
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address.
+          example: john@doe.com
+        password:
+          type: string
+          description: The user's password.
+          example: supersecretpassword
+
+    ValidationError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationErrorItem'
+
+    ValidationErrorItem:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The field that failed validation
+          example: email
+        message:
+          type: string
+          description: The error message
+          example: is required
+        rule:
+          type: string
+          description: The rule that failed validation
+          example: required
+
+    UpdateUser:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address
+          example: john@doe.com
+        full_name:
+          type: string
+          description: The user's full name
+          example: John Doe
+        avatar_url:
+          type: string
+          description: The user's avatar url
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
