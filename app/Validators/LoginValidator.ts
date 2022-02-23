@@ -10,7 +10,6 @@ export default class LoginValidator {
       rules.exists({
         table: 'users',
         column: 'email',
-        where: { provider: null },
       }),
     ]),
     password: schema.string({}, [rules.minLength(8), rules.maxLength(30)]),

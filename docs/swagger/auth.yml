@@ -21,7 +21,7 @@
             schema:
               $ref: '#/components/schemas/Auth'
       400:
-        description: Invalid request.
+        description: Error during register/login.
       500:
         description: Internal server error.
 

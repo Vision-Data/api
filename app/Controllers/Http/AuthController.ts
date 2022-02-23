@@ -13,31 +13,39 @@ export default class AuthController {
     params,
     ally,
     auth,
+    response,
   }: HttpContextContract) {
     const provider = ally.use(params.provider)
     const userData = await provider.user()
 
     // Get user or create them
-    const user = await User.firstOrCreate(
-      {
-        email: userData.email,
-        provider: params.provider,
-      },
-      {
-        email: userData.email,
-        fullName: userData.nickName,
-        provider: params.provider,
-        providerId: userData.id,
-        avatarUrl: userData.avatarUrl,
-      }
-    )
+    try {
+      const user = await User.firstOrCreate(
+        {
+          providerId: userData.id,
+          provider: params.provider,
+        },
+        {
+          email: userData.email,
+          fullName: userData.nickName,
+          provider: params.provider,
+          providerId: userData.id,
+          avatarUrl: userData.avatarUrl,
+        }
+      )
 
-    const token = await auth.use('api').generate(user, { expiresIn: '1hour' })
-    const tokenAndUserInformations = { token: token.token, user: token.user }
+      const token = await auth.use('api').generate(user, { expiresIn: '1hour' })
+      const tokenAndUserInformations = { token: token.token, user: token.user }
 
-    Ws.io.emit('login', tokenAndUserInformations)
+      Ws.io.emit('login', tokenAndUserInformations)
 
-    return tokenAndUserInformations
+      return tokenAndUserInformations
+    } catch {
+      const error = { error: 'An error occurred while logging in' }
+      Ws.io.emit('errorLogin', error)
+
+      response.status(400).send({ error: 'An error occurred while logging in' })
+    }
   }
 
   public async register({ request, auth }: HttpContextContract) {
@@ -47,6 +55,7 @@ export default class AuthController {
     const token = await auth.attempt(user.email, payload.password, {
       expiresIn: '1hour',
     })
+
     return { token: token.token, user: token.user }
   }
 
