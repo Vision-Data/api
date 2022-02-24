@@ -18,7 +18,7 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public providerId: string
 
-  @column({ serializeAs: null })
+  @column()
   public provider: string
 
   @column()
