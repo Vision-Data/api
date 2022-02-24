@@ -124,6 +124,7 @@ test.group('Register', (group) => {
       'created_at',
       'updated_at',
       'avatar_url',
+      'provider',
     ])
   })
 })
@@ -206,6 +207,7 @@ test.group('Login', (group) => {
       'created_at',
       'updated_at',
       'avatar_url',
+      'provider',
     ])
   })
 })
