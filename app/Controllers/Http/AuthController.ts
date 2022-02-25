@@ -3,6 +3,10 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import CreateUserValidator from 'App/Validators/CreateUserValidator'
 import LoginValidator from 'App/Validators/LoginValidator'
+import ResetPasswordLinkValidator from 'App/Validators/ResetPasswordLinkValidator'
+import PasswordToken from 'App/Models/PasswordToken'
+import { v4 as uuidv4 } from 'uuid'
+import ResetPasswordMailer from 'App/Mailers/ResetPasswordMailer'
 
 export default class AuthController {
   public async redirectToProvider({ params, ally }: HttpContextContract) {
@@ -72,5 +76,20 @@ export default class AuthController {
     await auth.use('api').revoke()
 
     return response.status(204)
+  }
+
+  public async sendResetLink({ request, response }: HttpContextContract) {
+    const payload = await request.validate(ResetPasswordLinkValidator)
+
+    const user = await User.findByOrFail('email', payload.email)
+
+    const passwordToken = await PasswordToken.create({
+      userId: user.id,
+      token: uuidv4(),
+    })
+
+    await new ResetPasswordMailer(user, passwordToken.token).sendLater()
+
+    response.status(204)
   }
 }
