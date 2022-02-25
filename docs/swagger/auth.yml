@@ -104,3 +104,29 @@
         description: Unauthorized.
       500:
         description: Internal server error.
+
+/password/reset:
+  post:
+    tags:
+      - Auth
+    description: Request a password reset email.
+    summary: Request a password reset email.
+    operationId: passwordReset
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswordReset'
+    responses:
+      204:
+        description: Successful password reset request.
+      400:
+        description: Invalid request.
+      422:
+        description: Validation error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      500:
+        description: Internal server error.
