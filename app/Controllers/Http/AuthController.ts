@@ -7,6 +7,7 @@ import ResetPasswordLinkValidator from 'App/Validators/ResetPasswordLinkValidato
 import PasswordToken from 'App/Models/PasswordToken'
 import { v4 as uuidv4 } from 'uuid'
 import ResetPasswordMailer from 'App/Mailers/ResetPasswordMailer'
+import ResetPasswordValidator from 'App/Validators/ResetPasswordValidator'
 
 export default class AuthController {
   public async redirectToProvider({ params, ally }: HttpContextContract) {
@@ -89,6 +90,26 @@ export default class AuthController {
     })
 
     await new ResetPasswordMailer(user, passwordToken.token).sendLater()
+
+    response.status(204)
+  }
+
+  public async resetPassword({
+    request,
+    response,
+    params,
+  }: HttpContextContract) {
+    const passwordToken = await PasswordToken.query()
+      .where('token', params.token)
+      .where('expired_at', '>', new Date())
+      .firstOrFail()
+
+    const payload = await request.validate(ResetPasswordValidator)
+
+    const user = await User.findOrFail(passwordToken.userId)
+    await user.merge({ password: payload.password }).save()
+
+    await passwordToken.delete()
 
     response.status(204)
   }
