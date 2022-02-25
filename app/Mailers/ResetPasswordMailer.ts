@@ -18,7 +18,7 @@ export default class ResetPasswordMailer extends BaseMailer {
   public prepare(message: MessageContract) {
     message
       .subject('Vision - Réinitialisation du mot de passe')
-      .from('admin@example.com')
+      .from('visiondata@mail.com')
       .to(this.user.email)
       .html(this.html)
   }

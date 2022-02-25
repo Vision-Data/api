@@ -3,6 +3,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
 import faker from 'faker'
+import Mail from '@ioc:Adonis/Addons/Mail'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 
@@ -13,6 +14,7 @@ test.group('Register', (group) => {
 
   group.afterEach(async () => {
     await Database.rollbackGlobalTransaction()
+    Mail.restore()
   })
 
   test('it should return that fullname is too short', async (assert) => {
@@ -209,5 +211,72 @@ test.group('Login', (group) => {
       'avatar_url',
       'provider',
     ])
+  })
+})
+
+test.group('Send reset password link', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  // TODO test de validation
+
+  test('it should return that email is invalid', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post('/password/reset')
+      .send({
+        email: 'john',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(body.errors[0].message, 'Invalid email')
+  })
+
+  test('it should return that email is not found', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post('/password/reset')
+      .send({
+        email: 'john@doe.com',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'User account with this email does not exist'
+    )
+  })
+
+  test('it should send password link successfuly  ', async (assert) => {
+    const user = {
+      full_name: 'John doe',
+      email: 'john@doe.com',
+      password: '2033003003030LFJLEFJ',
+    }
+
+    await createUser(user)
+
+    const { statusCode } = await supertest(BASE_URL)
+      .post('/password/reset')
+      .send({
+        email: 'john@doe.com',
+      })
+
+    assert.equal(statusCode, 204)
+
+    Mail.trap((message) => {
+      assert.deepEqual(message.to, [
+        {
+          address: 'virk@adonisjs.com',
+        },
+      ])
+
+      assert.equal(message.from?.address, 'visiondata@mail.com')
+
+      assert.equal(message.subject, 'Vision - Réinitialisation du mot de passe')
+    })
   })
 })
