@@ -111,7 +111,40 @@
       - Auth
     description: Request a password reset email.
     summary: Request a password reset email.
+    operationId: passwordResetLink
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswordResetEmail'
+    responses:
+      204:
+        description: Successful password reset request.
+      400:
+        description: Invalid request.
+      422:
+        description: Validation error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      500:
+        description: Internal server error.
+
+/password/reset/{token}:
+  post:
+    tags:
+      - Auth
+    description: Reset a password.
+    summary: Reset a password.
     operationId: passwordReset
+    parameters:
+      - name: token
+        in: path
+        description: The password reset token.
+        required: true
+        schema:
+          type: string
     requestBody:
       content:
         application/json:
@@ -119,7 +152,7 @@
             $ref: '#/components/schemas/PasswordReset'
     responses:
       204:
-        description: Successful password reset request.
+        description: Successful password reset.
       400:
         description: Invalid request.
       422:

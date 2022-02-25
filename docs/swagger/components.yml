@@ -110,10 +110,18 @@ components:
           description: The user's avatar url
           example: https://avatars0.githubusercontent.com/u/1234567?v=4
 
-    PasswordReset:
+    PasswordResetEmail:
       type: object
       properties:
         email:
           type: string
           description: The user's email address
           example: john@doe.com
+
+    PasswordReset:
+      type: object
+      properties:
+        password:
+          type: string
+          description: The user's password
+          example: supersecretpassword
