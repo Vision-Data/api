@@ -39,6 +39,7 @@ export default class ResetPasswordValidator {
    *
    */
   public messages = {
+    required: 'This field is required',
     minLength: 'This field must be at least {{ options.minLength }} characters',
     'email.unique': 'This email already exists',
     maxLength: 'This field must be at most {{ options.maxLength }} characters',

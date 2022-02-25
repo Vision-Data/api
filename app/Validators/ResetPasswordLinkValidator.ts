@@ -46,6 +46,7 @@ export default class ResetPasswordLinkValidator {
    *
    */
   public messages = {
+    required: 'This field is required',
     email: 'Invalid email',
     exists: 'User account with this email does not exist',
   }

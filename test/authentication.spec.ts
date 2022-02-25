@@ -1,9 +1,12 @@
+import PasswordToken from 'App/Models/PasswordToken'
 import { createUser } from './utils'
 import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
 import faker from 'faker'
 import Mail from '@ioc:Adonis/Addons/Mail'
+import { DateTime } from 'luxon'
+import { v4 as uuidv4 } from 'uuid'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 
@@ -14,7 +17,6 @@ test.group('Register', (group) => {
 
   group.afterEach(async () => {
     await Database.rollbackGlobalTransaction()
-    Mail.restore()
   })
 
   test('it should return that fullname is too short', async (assert) => {
@@ -221,9 +223,8 @@ test.group('Send reset password link', (group) => {
 
   group.afterEach(async () => {
     await Database.rollbackGlobalTransaction()
+    Mail.restore()
   })
-
-  // TODO test de validation
 
   test('it should return that email is invalid', async (assert) => {
     const { body, statusCode } = await supertest(BASE_URL)
@@ -280,3 +281,107 @@ test.group('Send reset password link', (group) => {
     })
   })
 })
+
+test.group('Reset password', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('it should return that token is expired', async (assert) => {
+    const passwordToken = await createPasswordToken()
+
+    passwordToken!.expiredAt = DateTime.now().minus({ minutes: 15 })
+    await passwordToken!.save()
+
+    const { statusCode } = await supertest(BASE_URL)
+      .post(`/password/reset/${passwordToken!.token}`)
+      .send({
+        password: '1234567666668',
+      })
+
+    assert.equal(statusCode, 404)
+  })
+
+  test('it should return that token is invalid', async (assert) => {
+    const { statusCode } = await supertest(BASE_URL)
+      .post(`/password/reset/${uuidv4()}`)
+      .send({
+        password: '1234567666668',
+      })
+
+    assert.equal(statusCode, 404)
+  })
+
+  test('it should return that password is too long', async (assert) => {
+    const passwordToken = await createPasswordToken()
+
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post(`/password/reset/${passwordToken!.token}`)
+      .send({
+        password: faker.lorem.words(50),
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at most 30 characters'
+    )
+  })
+
+  test('it should return that password is too short', async (assert) => {
+    const passwordToken = await createPasswordToken()
+
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post(`/password/reset/${passwordToken!.token}`)
+      .send({
+        password: 'pass',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at least 8 characters'
+    )
+  })
+
+  test('it should reset password successfuly', async (assert) => {
+    const passwordToken = await createPasswordToken()
+
+    const newPassword = 'newPass0rd9643'
+    const { statusCode } = await supertest(BASE_URL)
+      .post(`/password/reset/${passwordToken!.token}`)
+      .send({
+        password: newPassword,
+      })
+
+    assert.equal(statusCode, 204)
+
+    const { body, status } = await supertest(BASE_URL).post('/login').send({
+      email: 'john@doe.com',
+      password: newPassword,
+    })
+
+    assert.equal(status, 200)
+    assert.hasAllKeys(body, ['token', 'user'])
+  })
+})
+
+const createPasswordToken = async () => {
+  const user = {
+    full_name: 'John doe',
+    email: 'john@doe.com',
+    password: '2033003003030LFJLEFJ',
+  }
+
+  await createUser(user)
+
+  await supertest(BASE_URL).post('/password/reset').send({
+    email: 'john@doe.com',
+  })
+
+  return await PasswordToken.first()
+}
