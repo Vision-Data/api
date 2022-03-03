@@ -1,4 +1,11 @@
 components:
+  securitySchemes:
+    apiKeyAuth:
+      type: http
+      description: JWT Authorization header using the Bearer scheme.
+      scheme: bearer
+      bearerFormat: JWT
+      in: header
   schemas:
     Auth:
       type: object

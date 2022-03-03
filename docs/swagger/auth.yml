@@ -87,7 +87,8 @@
   post:
     tags:
       - Auth
-    security: []
+    security:
+      - ApiKeyAuth: []
     description: Logout the current user.
     summary: Logout the current user.
     operationId: logout

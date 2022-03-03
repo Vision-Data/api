@@ -260,18 +260,10 @@ test.group('Send reset password link', (group) => {
 
     await createUser(user)
 
-    const { statusCode } = await supertest(BASE_URL)
-      .post('/password/reset')
-      .send({
-        email: 'john@doe.com',
-      })
-
-    assert.equal(statusCode, 204)
-
     Mail.trap((message) => {
       assert.deepEqual(message.to, [
         {
-          address: 'virk@adonisjs.com',
+          address: user.email,
         },
       ])
 
@@ -279,6 +271,14 @@ test.group('Send reset password link', (group) => {
 
       assert.equal(message.subject, 'Vision - Réinitialisation du mot de passe')
     })
+
+    const { statusCode } = await supertest(BASE_URL)
+      .post('/password/reset')
+      .send({
+        email: 'john@doe.com',
+      })
+
+    assert.equal(statusCode, 204)
   })
 })
 
