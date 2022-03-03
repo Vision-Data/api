@@ -23,6 +23,8 @@
       - Users
     description: Update the current user
     summary: Update the current user
+    security:
+      - ApiKeyAuth: []
     operationId: updateMe
     requestBody:
       description: User object

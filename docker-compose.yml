@@ -10,10 +10,3 @@ services:
       TZ: 'Europe/Paris'
     volumes:
       - ./docker/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-    depends_on:
-      - database

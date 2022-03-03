@@ -29,6 +29,11 @@ Route.post('/login', 'AuthController.login')
 
 Route.post('logout', 'AuthController.logout').middleware('auth')
 
+Route.group(() => {
+  Route.post('/reset', 'AuthController.sendResetLink')
+  Route.post('/reset/:token', 'AuthController.resetPassword')
+}).prefix('password')
+
 /* Users */
 Route.group(() => {
   Route.get('/me', 'UsersController.show')
