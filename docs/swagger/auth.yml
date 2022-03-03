@@ -89,7 +89,8 @@
   post:
     tags:
       - Auth
-    security: []
+    security:
+      - ApiKeyAuth: []
     description: Logout the current user.
     summary: Logout the current user.
     operationId: logout
@@ -104,5 +105,64 @@
         description: Invalid request.
       401:
         description: Unauthorized.
+      500:
+        description: Internal server error.
+
+/password/reset:
+  post:
+    tags:
+      - Auth
+    description: Request a password reset email.
+    summary: Request a password reset email.
+    operationId: passwordResetLink
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswordResetEmail'
+    responses:
+      204:
+        description: Successful password reset request.
+      400:
+        description: Invalid request.
+      422:
+        description: Validation error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      500:
+        description: Internal server error.
+
+/password/reset/{token}:
+  post:
+    tags:
+      - Auth
+    description: Reset a password.
+    summary: Reset a password.
+    operationId: passwordReset
+    parameters:
+      - name: token
+        in: path
+        description: The password reset token.
+        required: true
+        schema:
+          type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswordReset'
+    responses:
+      204:
+        description: Successful password reset.
+      400:
+        description: Invalid request.
+      422:
+        description: Validation error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
       500:
         description: Internal server error.

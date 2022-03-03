@@ -14,10 +14,16 @@ export default class DeleteToken extends BaseTask {
   }
 
   public async handle() {
-    const deletedTokens = await Database.from('api_tokens')
+    const deletedApiTokens = await Database.from('api_tokens')
       .where('expires_at', '<', new Date())
       .delete()
 
-    this.logger.info(`${deletedTokens} tokens deleted`)
+    this.logger.info(`${deletedApiTokens} api tokens deleted`)
+
+    const deletedPasswordTokens = await Database.from('password_tokens')
+      .where('expired_at', '<', new Date())
+      .delete()
+
+    this.logger.info(`${deletedPasswordTokens} password tokens deleted`)
   }
 }
