@@ -49,7 +49,7 @@ export default class AuthController {
       const error = { error: 'An error occurred while logging in' }
       Ws.io.emit('errorLogin', error)
 
-      response.status(400).send({ error: 'An error occurred while logging in' })
+      response.status(400).send(error)
     }
   }
 
