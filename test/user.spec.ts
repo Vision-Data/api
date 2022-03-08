@@ -136,3 +136,55 @@ test.group('Update user profile', (group) => {
     assert.include(body, data)
   })
 })
+
+test.group('Change password', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+    user = await login(BASE_URL)
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('it should return that password is too long', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .put(`/users/me/password`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        password: faker.lorem.words(50),
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at most 30 characters'
+    )
+  })
+
+  test('it should return that password is too short', async (assert) => {
+    const { body, statusCode } = await supertest(BASE_URL)
+      .put(`/users/me/password`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        password: 'pass',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'This field must be at least 8 characters'
+    )
+  })
+
+  test('it should return that password is updated successfully', async (assert) => {
+    const { statusCode } = await supertest(BASE_URL)
+      .put(`/users/me/password`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        password: 'newPassw0rd',
+      })
+
+    assert.equal(statusCode, 204)
+  })
+})
