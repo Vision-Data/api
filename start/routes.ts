@@ -20,6 +20,8 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.on('/').redirectToPath('/docs')
+
 /* Authentication */
 Route.get('/auth/:provider', 'AuthController.redirectToProvider')
 Route.get('/:provider/callback', 'AuthController.handleProviderCallback')
@@ -38,6 +40,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/me', 'UsersController.show')
   Route.put('/me', 'UsersController.update')
+  Route.put('/me/password', 'UsersController.updatePassword')
 })
   .prefix('/users')
   .middleware('auth')

@@ -50,3 +50,33 @@
               $ref: '#/components/schemas/ValidationError'
       500:
         description: Internal Server Error
+
+/users/password:
+  put:
+    tags:
+      - Users
+    description: Update the current user password
+    summary: Update the current user password
+    security:
+      - ApiKeyAuth: []
+    operationId: updatePassword
+    requestBody:
+      description: New password for the user
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswordReset'
+    responses:
+      204:
+        description: Password updated successfully
+      401:
+        description: Unauthorized
+      422:
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      500:
+        description: Internal Server Error
