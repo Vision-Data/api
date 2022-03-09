@@ -1,5 +1,11 @@
+import User from 'App/Models/User'
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  column,
+  manyToMany,
+  ManyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Workspace extends BaseModel {
   @column({ isPrimary: true })
@@ -16,6 +22,12 @@ export default class Workspace extends BaseModel {
 
   @column()
   public color?: string
+
+  @manyToMany(() => User, {
+    pivotTable: 'workspace_users',
+    pivotTimestamps: true,
+  })
+  public users: ManyToMany<typeof User>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

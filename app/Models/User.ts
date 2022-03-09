@@ -1,5 +1,12 @@
+import Workspace from 'App/Models/Workspace'
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  manyToMany,
+  ManyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 
 export default class User extends BaseModel {
@@ -29,6 +36,9 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @manyToMany(() => Workspace, { pivotTable: 'workspace_users' })
+  public workspaces: ManyToMany<typeof Workspace>
 
   @beforeSave()
   public static async hashPassword(user: User) {

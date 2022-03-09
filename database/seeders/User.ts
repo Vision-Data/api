@@ -7,6 +7,5 @@ export default class UserSeeder extends BaseSeeder {
       email: 'john@doe.com',
       fullName: 'John Doe',
     }).create()
-    await UserFactory.createMany(10)
   }
 }

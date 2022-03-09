@@ -8,19 +8,19 @@ export default class WorkspaceUsers extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table
         .uuid('user_id')
-        .primary()
-        .unsigned()
-        .references('users.id')
-        .onDelete('NULL')
+        .references('id')
+        .inTable('users')
+        .onDelete('SET NULL')
         .notNullable()
 
       table
         .uuid('workspace_id')
-        .primary()
-        .unsigned()
-        .references('workspaces.id')
+        .references('id')
+        .inTable('workspaces')
         .onDelete('CASCADE')
         .notNullable()
+
+      table.primary(['user_id', 'workspace_id'])
 
       table
         .enum('role', Object.values(RoleEnum))
@@ -30,7 +30,8 @@ export default class WorkspaceUsers extends BaseSchema {
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('joined_at', { useTz: true }).notNullable()
+      table.timestamp('created_at', { useTz: true }).notNullable()
+      table.timestamp('updated_at', { useTz: true }).notNullable()
     })
   }
 
