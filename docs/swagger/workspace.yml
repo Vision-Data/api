@@ -1,0 +1,33 @@
+/workspaces:
+  post:
+    tags:
+      - Workspaces
+    description: Create a new workspace. The user who creates workspacde is by default the owner.
+    summary: Create a new workspace
+    security:
+      - ApiKeyAuth: []
+    operationId: createWorkspace
+    requestBody:
+      description: Workspace object
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateWorkspace'
+    responses:
+      200:
+        description: Created workspace
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workspace'
+      401:
+        description: Unauthorized
+      422:
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      500:
+        description: Internal Server Error

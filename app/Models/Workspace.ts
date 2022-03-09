@@ -21,7 +21,7 @@ export default class Workspace extends BaseModel {
   public logo?: string
 
   @column()
-  public color?: object
+  public color?: string
 
   @manyToMany(() => User, {
     pivotTable: 'workspace_users',

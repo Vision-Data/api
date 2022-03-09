@@ -14,7 +14,7 @@ export default class Workspaces extends BaseSchema {
 
       table.json('environment_variables').nullable()
       table.text('logo').nullable()
-      table.json('color').nullable()
+      table.string('color').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
