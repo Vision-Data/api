@@ -7,7 +7,7 @@ export const WorkspaceFactory = Factory.define(Workspace, ({ faker }) => {
     name: faker.name.findName(),
     environmentVariables: { data: [] },
     logo: faker.image.imageUrl(),
-    color: faker.internet.color(),
+    color: { data: 'red' },
   }
 })
   .relation('users', () => UserFactory)

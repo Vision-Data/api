@@ -44,3 +44,7 @@ Route.group(() => {
 })
   .prefix('/users')
   .middleware('auth')
+
+Route.group(() => {
+  Route.resource('workspaces', 'WorkspacesController').apiOnly()
+}).middleware('auth')
