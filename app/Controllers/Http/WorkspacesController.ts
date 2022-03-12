@@ -14,4 +14,26 @@ export default class WorkspacesController {
 
     return workspace
   }
+
+  public async update({ bouncer, auth, params, request }: HttpContextContract) {
+    const workspace = await Workspace.query()
+      .preload('users', (query) =>
+        query.pivotColumns(['role']).wherePivot('user_id', auth.user!.id)
+      )
+      .innerJoin(
+        'workspace_users',
+        'workspace_users.workspace_id',
+        'workspaces.id'
+      )
+      .where('id', params.id)
+      .where('workspace_users.user_id', auth.user!.id)
+      .firstOrFail()
+
+    await bouncer.with('WorkspacePolicy').authorize('update', workspace)
+
+    const payload = await request.validate(WorkspaceValidator)
+    workspace.merge(payload).save()
+
+    return workspace
+  }
 }

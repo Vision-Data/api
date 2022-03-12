@@ -163,14 +163,14 @@ components:
           type: string
           description: The workspace name
           example: My Workspace
-        environment_variables:
-          type: object
-          description: The workspace environment variables
-          example: { 'VARIABLE_NAME': 'VARIABLE_VALUE' }
         color:
           type: string
-          description: The workspace color
+          description: The workspace color (accepts only hexadecimal color values)
           example: '#ff0000'
+        logo:
+          type: string
+          description: The workspace logo URL
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
         created_at:
           type: string
           format: date-time

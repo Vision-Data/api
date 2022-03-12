@@ -9,7 +9,6 @@ export default class WorkspaceValidator {
       rules.minLength(3),
       rules.maxLength(100),
     ]),
-    environment_variables: schema.object.optional().anyMembers(),
     logo: schema.string.optional({ trim: true }, [rules.url()]),
     color: schema.string.optional({ trim: true }, [rules.hexColor()]),
   })

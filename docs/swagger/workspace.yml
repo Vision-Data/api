@@ -31,3 +31,46 @@
               $ref: '#/components/schemas/ValidationError'
       500:
         description: Internal Server Error
+
+/workspaces/{workspaceId}:
+  put:
+    tags:
+      - Workspaces
+    description: Update an existing workspace.
+    summary: Update an existing workspace
+    security:
+      - ApiKeyAuth: []
+    operationId: updateWorkspace
+    parameters:
+      - in: path
+        name: workspace_id
+        description: Workspace ID
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Workspace object
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Workspace'
+    responses:
+      200:
+        description: Updated workspace
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workspace'
+      401:
+        description: Unauthorized
+      403:
+        description: Forbidden - The user is not the owner of the workspace
+      422:
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationError'
+      500:
+        description: Internal Server Error
