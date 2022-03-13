@@ -10,7 +10,7 @@ export default class WorkspaceUsers extends BaseSchema {
         .uuid('user_id')
         .references('id')
         .inTable('users')
-        .onDelete('SET NULL')
+        .onDelete('CASCADE')
         .notNullable()
 
       table

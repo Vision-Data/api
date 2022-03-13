@@ -29,11 +29,41 @@ export default class WorkspacesController {
       .where('workspace_users.user_id', auth.user!.id)
       .firstOrFail()
 
-    await bouncer.with('WorkspacePolicy').authorize('update', workspace)
+    await bouncer
+      .with('WorkspacePolicy')
+      .authorize('updateWorkspace', workspace)
 
     const payload = await request.validate(WorkspaceValidator)
     workspace.merge(payload).save()
 
     return workspace
+  }
+
+  public async destroy({
+    bouncer,
+    auth,
+    params,
+    response,
+  }: HttpContextContract) {
+    const workspace = await Workspace.query()
+      .preload('users', (query) =>
+        query.pivotColumns(['role']).wherePivot('user_id', auth.user!.id)
+      )
+      .innerJoin(
+        'workspace_users',
+        'workspace_users.workspace_id',
+        'workspaces.id'
+      )
+      .where('id', params.id)
+      .where('workspace_users.user_id', auth.user!.id)
+      .firstOrFail()
+
+    await bouncer
+      .with('WorkspacePolicy')
+      .authorize('destroyWorkspace', workspace)
+
+    await workspace.delete()
+
+    response.status(204)
   }
 }
