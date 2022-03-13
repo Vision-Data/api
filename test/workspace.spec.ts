@@ -7,6 +7,45 @@ import faker from 'faker'
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 let user
 
+test.group('Get workspaces', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+    user = await login(BASE_URL)
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('it should return list of workspaces', async (assert) => {
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { body } = await supertest(BASE_URL)
+      .get('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.equal(body.data.length, 1)
+    assert.hasAllKeys(body, ['data', 'meta'])
+    assert.hasAllKeys(body.data[0], [
+      'id',
+      'name',
+      'logo',
+      'color',
+      'users',
+      'created_at',
+      'updated_at',
+      'environment_variables',
+    ])
+  })
+})
+
 test.group('Create a workspace', (group) => {
   group.beforeEach(async () => {
     await Database.beginGlobalTransaction()
