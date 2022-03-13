@@ -25,6 +25,19 @@ export default class WorkspacesController {
     return workspace
   }
 
+  public async show({ auth, params }: HttpContextContract) {
+    return await Workspace.query()
+      .preload('users')
+      .innerJoin(
+        'workspace_users',
+        'workspace_users.workspace_id',
+        'workspaces.id'
+      )
+      .where('workspace_users.user_id', auth.user!.id)
+      .where('id', params.id)
+      .firstOrFail()
+  }
+
   public async update({ bouncer, auth, params, request }: HttpContextContract) {
     const workspace = await Workspace.query()
       .preload('users', (query) => query.wherePivot('user_id', auth.user!.id))
