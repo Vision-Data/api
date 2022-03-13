@@ -74,3 +74,30 @@
               $ref: '#/components/schemas/ValidationError'
       500:
         description: Internal Server Error
+
+  delete:
+    tags:
+      - Workspaces
+    description: Delete an existing workspace.
+    summary: Delete an existing workspace
+    security:
+      - ApiKeyAuth: []
+    operationId: deleteWorkspace
+    parameters:
+      - in: path
+        name: workspace_id
+        description: Workspace ID
+        required: true
+        schema:
+          type: string
+    responses:
+      204:
+        description: Deleted workspace successfully
+      401:
+        description: Unauthorized
+      403:
+        description: Forbidden - The user is not the owner of the workspace
+      404:
+        description: Not Found
+      500:
+        description: Internal Server Error
