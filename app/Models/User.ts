@@ -4,6 +4,7 @@ import {
   BaseModel,
   beforeSave,
   column,
+  computed,
   manyToMany,
   ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
@@ -39,6 +40,11 @@ export default class User extends BaseModel {
 
   @manyToMany(() => Workspace, { pivotTable: 'workspace_users' })
   public workspaces: ManyToMany<typeof Workspace>
+
+  @computed()
+  public get role() {
+    return this.$extras.pivot_role
+  }
 
   @beforeSave()
   public static async hashPassword(user: User) {

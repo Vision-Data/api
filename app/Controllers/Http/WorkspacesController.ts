@@ -1,9 +1,20 @@
+import { PaginationEnum } from './../../Enums/PaginationEnum'
 import { RoleEnum } from './../../Enums/RoleEnum'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Workspace from 'App/Models/Workspace'
 import WorkspaceValidator from 'App/Validators/WorkspaceValidator'
 
 export default class WorkspacesController {
+  public async index({ auth, request }: HttpContextContract) {
+    const page = request.input('page', PaginationEnum.DEFAULT_PAGE)
+
+    return await auth
+      .user!.related('workspaces')
+      .query()
+      .preload('users')
+      .paginate(page, PaginationEnum.DEFAULT_LIMIT)
+  }
+
   public async store({ request, auth }: HttpContextContract) {
     const payload = await request.validate(WorkspaceValidator)
 
@@ -11,15 +22,12 @@ export default class WorkspacesController {
     await workspace
       .related('users')
       .attach({ [auth.user!.id]: { role: RoleEnum.OWNER } })
-
     return workspace
   }
 
   public async update({ bouncer, auth, params, request }: HttpContextContract) {
     const workspace = await Workspace.query()
-      .preload('users', (query) =>
-        query.pivotColumns(['role']).wherePivot('user_id', auth.user!.id)
-      )
+      .preload('users', (query) => query.wherePivot('user_id', auth.user!.id))
       .innerJoin(
         'workspace_users',
         'workspace_users.workspace_id',
@@ -46,9 +54,7 @@ export default class WorkspacesController {
     response,
   }: HttpContextContract) {
     const workspace = await Workspace.query()
-      .preload('users', (query) =>
-        query.pivotColumns(['role']).wherePivot('user_id', auth.user!.id)
-      )
+      .preload('users', (query) => query.wherePivot('user_id', auth.user!.id))
       .innerJoin(
         'workspace_users',
         'workspace_users.workspace_id',

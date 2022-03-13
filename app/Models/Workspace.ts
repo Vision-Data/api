@@ -26,6 +26,7 @@ export default class Workspace extends BaseModel {
   @manyToMany(() => User, {
     pivotTable: 'workspace_users',
     pivotTimestamps: true,
+    pivotColumns: ['role'],
   })
   public users: ManyToMany<typeof User>
 
