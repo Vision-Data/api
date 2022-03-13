@@ -1,4 +1,24 @@
 /workspaces:
+  get:
+    tags:
+      - Workspaces
+    description: Get all workspaces. Results are paginated (20 items per page).
+    summary: Get all workspaces
+    security:
+      - ApiKeyAuth: []
+    operationId: getWorkspaces
+    query:
+      - name: page
+        type: integer
+        description: Page number
+        default: 1
+    responses:
+      200:
+        description: A list of workspaces
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkspacePaginated'
   post:
     tags:
       - Workspaces
