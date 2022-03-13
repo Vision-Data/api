@@ -135,6 +135,61 @@ test.group('Create a workspace', (group) => {
   })
 })
 
+test.group('Get workspace by id', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+    user = await login(BASE_URL)
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('it should that return workspace is not found', async (assert) => {
+    const anotherUser = await login(BASE_URL, { email: 'another@user.com' })
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${anotherUser.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { statusCode } = await supertest(BASE_URL)
+      .get(`/workspaces/${result.body.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.equal(statusCode, 404)
+  })
+
+  test('it should that return workspace successfuly', async (assert) => {
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { body } = await supertest(BASE_URL)
+      .get(`/workspaces/${result.body.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.hasAllKeys(body, [
+      'id',
+      'name',
+      'logo',
+      'color',
+      'users',
+      'created_at',
+      'updated_at',
+      'environment_variables',
+    ])
+  })
+})
+
 test.group('Update a workspace', (group) => {
   group.beforeEach(async () => {
     await Database.beginGlobalTransaction()
