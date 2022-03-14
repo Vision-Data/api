@@ -156,3 +156,40 @@
         description: Not Found
       500:
         description: Internal Server Error
+
+/workspaces/{workspaceId}/invitations:
+  post:
+    tags:
+      - Workspaces
+    description: Invite a user to a workspace.
+    summary: Invite a user to a workspace
+    security:
+      - ApiKeyAuth: []
+    operationId: inviteUserToWorkspace
+    parameters:
+      - in: path
+        name: workspace_id
+        description: Workspace ID
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Invitation object
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Invitation'
+    responses:
+      204:
+        description: Invitation
+      401:
+        description: Unauthorized
+      403:
+        description: Forbidden - The user is not the owner of the workspace
+      404:
+        description: Not Found
+      409:
+        description: Conflict - The user is already added to the workspace
+      500:
+        description: Internal Server Error
