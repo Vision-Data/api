@@ -51,7 +51,7 @@
       500:
         description: Internal Server Error
 
-/users/password:
+/users/me/password:
   put:
     tags:
       - Users

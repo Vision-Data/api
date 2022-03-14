@@ -1,8 +1,11 @@
+import Mail from '@ioc:Adonis/Addons/Mail'
 import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
 import { login } from './utils'
 import faker from 'faker'
+import { createUser } from './utils'
+import Workspace from 'App/Models/Workspace'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 let user
@@ -441,5 +444,159 @@ test.group('Delete a workspace', (group) => {
       .set('Authorization', `Bearer ${user.token}`)
 
     assert.equal(statusCode, 204)
+  })
+})
+
+test.group('Invite a user in workspace', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+    user = await login(BASE_URL)
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+    Mail.restore()
+  })
+
+  test('it should that return workspace not found', async (assert) => {
+    const anotherUser = await login(BASE_URL, { email: 'another@user.com' })
+    const { body } = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${anotherUser.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { statusCode } = await supertest(BASE_URL)
+      .post(`/workspaces/${body.id}/invitations`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        email: anotherUser.user.email,
+      })
+
+    assert.equal(statusCode, 404)
+  })
+
+  test('it should that return user not allowed to update workspace', async (assert) => {
+    const { body } = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    await Database.rawQuery(
+      'UPDATE workspace_users SET role = ? WHERE workspace_id = ? AND user_id = ?',
+      ['member', body.id, user.user.id]
+    )
+
+    const { statusCode } = await supertest(BASE_URL)
+      .post(`/workspaces/${body.id}/invitations`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        email: 'anotheruser@gmail.com',
+      })
+
+    assert.equal(statusCode, 403)
+  })
+
+  test('it should that return email is not valid', async (assert) => {
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post(`/workspaces/${result.body.id}/invitations`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        email: 'notanemail',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(body.errors[0].message, 'Invalid email')
+  })
+
+  test('it should that return user account not found', async (assert) => {
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post(`/workspaces/${result.body.id}/invitations`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        email: 'notregistered@gmail.com',
+      })
+
+    assert.equal(statusCode, 422)
+    assert.equal(
+      body.errors[0].message,
+      'User account with this email does not exist'
+    )
+  })
+
+  test('it should that return user account already added', async (assert) => {
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const { body, statusCode } = await supertest(BASE_URL)
+      .post(`/workspaces/${result.body.id}/invitations`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        email: user.user.email,
+      })
+
+    assert.equal(statusCode, 409)
+    assert.equal(body.error, 'User already added in workspace')
+  })
+
+  test('it should that return invitation sent successfuly', async (assert) => {
+    const result = await supertest(BASE_URL)
+      .post('/workspaces')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        name: 'My amzing workspace',
+        logo: 'http://google.com',
+        color: '#ffffff',
+      })
+
+    const anotherUser = await createUser({ email: 'anotheruser@mail.com' })
+
+    Mail.trap((message) => {
+      assert.deepEqual(message.to, [
+        {
+          address: anotherUser.email,
+        },
+      ])
+
+      assert.equal(statusCode, 204)
+    })
+
+    const { statusCode } = await supertest(BASE_URL)
+      .post(`/workspaces/${result.body.id}/invitations`)
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        email: anotherUser.email,
+      })
   })
 })

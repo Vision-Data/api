@@ -13,5 +13,6 @@ export default class CreateInvitationValidator {
 
   public messages = {
     email: 'Invalid email',
+    exists: 'User account with this email does not exist',
   }
 }

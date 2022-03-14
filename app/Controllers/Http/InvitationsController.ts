@@ -32,7 +32,9 @@ export default class InvitationsController {
     const user = await User.query().where('email', payload.email).firstOrFail()
 
     if (workspace.users.find((user) => user.email === payload.email)) {
-      response.status(409).send({ error: 'User already in workspace' })
+      return response
+        .status(409)
+        .send({ error: 'User already added in workspace' })
     }
 
     const invitation = await Invitation.create({
