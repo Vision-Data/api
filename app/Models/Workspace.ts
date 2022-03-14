@@ -9,7 +9,7 @@ import {
 
 export default class Workspace extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: string
 
   @column()
   public name: string

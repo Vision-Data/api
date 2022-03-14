@@ -50,9 +50,7 @@ export default class WorkspacesController {
       .where('workspace_users.user_id', auth.user!.id)
       .firstOrFail()
 
-    await bouncer
-      .with('WorkspacePolicy')
-      .authorize('updateWorkspace', workspace)
+    await bouncer.with('WorkspacePolicy').authorize('ownerActions', workspace)
 
     const payload = await request.validate(WorkspaceValidator)
     workspace.merge(payload).save()
@@ -77,9 +75,7 @@ export default class WorkspacesController {
       .where('workspace_users.user_id', auth.user!.id)
       .firstOrFail()
 
-    await bouncer
-      .with('WorkspacePolicy')
-      .authorize('destroyWorkspace', workspace)
+    await bouncer.with('WorkspacePolicy').authorize('ownerActions', workspace)
 
     await workspace.delete()
 
