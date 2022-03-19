@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import Route from '@ioc:Adonis/Core/Route'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import InvitationMailer from 'App/Mailers/InvitationMailer'
@@ -52,7 +53,20 @@ export default class InvitationsController {
     response.status(204)
   }
 
-  public async validate() {
-    return 'not implemented'
+  public async validate({ params, response }: HttpContextContract) {
+    const invitation = await Invitation.query()
+      .where('workspace_id', params.id)
+      .where('id', params.invitationId)
+      .firstOrFail()
+
+    if (invitation.expiredAt < DateTime.now()) {
+      return { error: 'Invitation expired' }
+    }
+
+    const workspace = await Workspace.findOrFail(params.id)
+    await workspace.related('users').attach([invitation.userId])
+    await invitation.delete()
+
+    response.status(204)
   }
 }

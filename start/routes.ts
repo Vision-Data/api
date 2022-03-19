@@ -51,7 +51,7 @@ Route.group(() => {
 Route.group(() => {
   Route.resource('workspaces', 'WorkspacesController').apiOnly()
   Route.post('workspaces/:id/invitations', 'InvitationsController.store')
-  Route.get(
+  Route.post(
     'workspaces/:id/invitations/:invitationId',
     'InvitationsController.validate'
   ).as('validateInvitation')
