@@ -60,7 +60,7 @@ export default class InvitationsController {
       .firstOrFail()
 
     if (invitation.expiredAt < DateTime.now()) {
-      return { error: 'Invitation expired' }
+      return response.status(410).send({ error: 'Invitation expired' })
     }
 
     const workspace = await Workspace.findOrFail(params.id)
