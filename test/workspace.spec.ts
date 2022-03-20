@@ -149,7 +149,9 @@ test.group('Get workspace by id', (group) => {
   })
 
   test('it should that return workspace is not found', async (assert) => {
-    const anotherUser = await login(BASE_URL, { email: 'another@user.com' })
+    const anotherUser = await login(BASE_URL, {
+      email: 'another@user.com',
+    })
     const result = await createWorkspace(anotherUser)
 
     const { statusCode } = await supertest(BASE_URL)
@@ -190,7 +192,9 @@ test.group('Update a workspace', (group) => {
   })
 
   test('it should that return workspace not found', async (assert) => {
-    const anotherUser = await login(BASE_URL, { email: 'another@user.com' })
+    const anotherUser = await login(BASE_URL, {
+      email: 'another@user.com',
+    })
     const { body } = await createWorkspace(anotherUser)
 
     const { statusCode } = await supertest(BASE_URL)
@@ -327,7 +331,9 @@ test.group('Delete a workspace', (group) => {
   })
 
   test('it should that return workspace not found', async (assert) => {
-    const anotherUser = await login(BASE_URL, { email: 'another@user.com' })
+    const anotherUser = await login(BASE_URL, {
+      email: 'another@user.com',
+    })
     const { body } = await createWorkspace(anotherUser)
 
     const { statusCode } = await supertest(BASE_URL)
@@ -375,7 +381,9 @@ test.group('Invite a user in workspace', (group) => {
   })
 
   test('it should that return workspace not found', async (assert) => {
-    const anotherUser = await login(BASE_URL, { email: 'another@user.com' })
+    const anotherUser = await login(BASE_URL, {
+      email: 'another@user.com',
+    })
     const { body } = await createWorkspace(anotherUser)
 
     const { statusCode } = await createInvitation(
@@ -498,9 +506,14 @@ test.group('Validate an invitation to a workspace', (group) => {
     invitation.expiredAt = DateTime.now().minus({ days: 1 })
     await invitation.save()
 
+    const anotherUserLogged = await supertest(BASE_URL).post('/login').send({
+      email: anotherUser.email,
+      password: 'secretPassw0rd',
+    })
+
     const { body, statusCode } = await supertest(BASE_URL)
       .post(`/workspaces/${result.body.id}/invitations/${invitation.id}`)
-      .set('Authorization', `Bearer ${user.token}`)
+      .set('Authorization', `Bearer ${anotherUserLogged.body.token}`)
 
     assert.equal(statusCode, 410)
     assert.equal(body.error, 'Invitation expired')
@@ -513,8 +526,98 @@ test.group('Validate an invitation to a workspace', (group) => {
 
     const invitation = await Invitation.firstOrFail()
 
+    const anotherUserLogged = await supertest(BASE_URL).post('/login').send({
+      email: anotherUser.email,
+      password: 'secretPassw0rd',
+    })
+
     const { statusCode } = await supertest(BASE_URL)
       .post(`/workspaces/${result.body.id}/invitations/${invitation.id}`)
+      .set('Authorization', `Bearer ${anotherUserLogged.body.token}`)
+
+    assert.equal(statusCode, 204)
+  })
+})
+
+test.group('Remove a user in workspace', (group) => {
+  group.beforeEach(async () => {
+    await Database.beginGlobalTransaction()
+    user = await login(BASE_URL)
+  })
+
+  group.afterEach(async () => {
+    await Database.rollbackGlobalTransaction()
+  })
+
+  test('it should that return workspace not found', async (assert) => {
+    const anotherUser = await login(BASE_URL, {
+      email: 'another@user.com',
+    })
+    const { body } = await createWorkspace(anotherUser)
+
+    const { statusCode } = await supertest(BASE_URL)
+      .delete(`/workspaces/${body.id}/users/${user.user.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.equal(statusCode, 404)
+  })
+
+  test('it should that return user not allowed to remove a user workspace', async (assert) => {
+    const { body } = await createWorkspace(user)
+
+    await Database.rawQuery(
+      'UPDATE workspace_users SET role = ? WHERE workspace_id = ? AND user_id = ?',
+      ['member', body.id, user.user.id]
+    )
+
+    const { statusCode } = await supertest(BASE_URL)
+      .delete(`/workspaces/${body.id}/users/${user.user.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.equal(statusCode, 403)
+  })
+
+  test('it should that return user not found in workspace', async (assert) => {
+    const { body } = await createWorkspace(user)
+    const anotherUser = await createUser({ email: 'anotheruser@gmail.com' })
+
+    const { statusCode } = await supertest(BASE_URL)
+      .delete(`/workspaces/${body.id}/users/${anotherUser.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.equal(statusCode, 404)
+  })
+
+  test('it should that return cannot remove yourself', async (assert) => {
+    const { body } = await createWorkspace(user)
+
+    const { statusCode } = await supertest(BASE_URL)
+      .delete(`/workspaces/${body.id}/users/${user.user.id}`)
+      .set('Authorization', `Bearer ${user.token}`)
+
+    assert.equal(statusCode, 400)
+  })
+
+  test('it should that remove user successfuly', async (assert) => {
+    const { body } = await createWorkspace(user)
+
+    const anotherUser = await createUser({ email: 'another@gmail.com' })
+
+    await createInvitation(user, body.id, anotherUser.email)
+
+    const anotherUserLogged = await supertest(BASE_URL).post('/login').send({
+      email: anotherUser.email,
+      password: 'secretPassw0rd',
+    })
+
+    const invitation = await Invitation.firstOrFail()
+
+    await supertest(BASE_URL)
+      .post(`/workspaces/${body.id}/invitations/${invitation.id}`)
+      .set('Authorization', `Bearer ${anotherUserLogged.body.token}`)
+
+    const { statusCode } = await supertest(BASE_URL)
+      .delete(`/workspaces/${body.id}/users/${anotherUser.id}`)
       .set('Authorization', `Bearer ${user.token}`)
 
     assert.equal(statusCode, 204)

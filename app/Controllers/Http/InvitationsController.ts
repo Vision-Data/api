@@ -53,9 +53,10 @@ export default class InvitationsController {
     response.status(204)
   }
 
-  public async validate({ params, response }: HttpContextContract) {
+  public async validate({ params, response, auth }: HttpContextContract) {
     const invitation = await Invitation.query()
       .where('workspace_id', params.id)
+      .where('user_id', auth.user!.id)
       .where('id', params.invitationId)
       .firstOrFail()
 
