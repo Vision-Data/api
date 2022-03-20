@@ -457,15 +457,14 @@ test.group('Invite a user in workspace', (group) => {
           address: anotherUser.email,
         },
       ])
-
-      assert.equal(statusCode, 204)
     })
 
-    const { body, statusCode } = await createInvitation(
+    const { statusCode } = await createInvitation(
       user,
       result.body.id,
       anotherUser.email
     )
+    assert.equal(statusCode, 204)
   })
 })
 
@@ -479,10 +478,6 @@ test.group('Validate an invitation to a workspace', (group) => {
     await Database.rollbackGlobalTransaction()
     Mail.restore()
   })
-
-  // TODO si l'invitation a expiré
-
-  // Le succès
 
   test('it should return workspace not found', async (assert) => {
     const { statusCode } = await supertest(BASE_URL)

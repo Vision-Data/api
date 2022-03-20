@@ -55,4 +55,9 @@ Route.group(() => {
     'workspaces/:id/invitations/:invitationId',
     'InvitationsController.validate'
   ).as('validateInvitation')
+
+  Route.delete(
+    'workspaces/:id/users/:userId',
+    'WorkspacesController.removeUser'
+  )
 }).middleware('auth')

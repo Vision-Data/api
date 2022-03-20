@@ -81,4 +81,42 @@ export default class WorkspacesController {
 
     response.status(204)
   }
+
+  public async removeUser({
+    params,
+    auth,
+    bouncer,
+    response,
+  }: HttpContextContract) {
+    const workspace = await Workspace.query()
+      .innerJoin(
+        'workspace_users',
+        'workspace_users.workspace_id',
+        'workspaces.id'
+      )
+      .where('id', params.id)
+      .where('workspace_users.user_id', auth.user!.id)
+      .preload('users')
+      .firstOrFail()
+
+    await bouncer.with('WorkspacePolicy').authorize('ownerActions', workspace)
+
+    const userInWorkspace = workspace.users.find(
+      (user) => user.id === params.userId
+    )
+
+    if (!userInWorkspace) {
+      return response.status(404).send({ error: 'User not found in workspace' })
+    }
+
+    if (auth.user!.id === params.userId) {
+      return response
+        .status(400)
+        .send({ error: 'You cannot remove yourself from workspace' })
+    }
+
+    await workspace.related('users').detach([params.userId])
+
+    response.status(204)
+  }
 }

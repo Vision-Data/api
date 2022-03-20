@@ -5,6 +5,7 @@ import Workspace from 'App/Models/Workspace'
 
 export default class WorkspacePolicy extends BasePolicy {
   public async ownerActions(user: User, workspace: Workspace) {
-    return workspace.users[0].role === RoleEnum.OWNER
+    const admin = workspace.users.find((admin) => admin.id === user.id)
+    return admin!.role === RoleEnum.OWNER
   }
 }
