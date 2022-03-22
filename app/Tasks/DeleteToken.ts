@@ -1,9 +1,10 @@
 import { BaseTask } from 'adonis5-scheduler/build'
 import Database from '@ioc:Adonis/Lucid/Database'
+import Invitation from 'App/Models/Invitation'
 
 export default class DeleteToken extends BaseTask {
   public static get schedule() {
-    return '*/5 * * * *'
+    return '* * * * *'
   }
   /**
    * Set enable use .lock file for block run retry task
@@ -14,16 +15,22 @@ export default class DeleteToken extends BaseTask {
   }
 
   public async handle() {
-    const deletedApiTokens = await Database.from('api_tokens')
+    const apiTokens = await Database.from('api_tokens')
       .where('expires_at', '<', new Date())
       .delete()
 
-    this.logger.info(`${deletedApiTokens} api tokens deleted`)
+    this.logger.info(`${apiTokens} api tokens deleted`)
 
-    const deletedPasswordTokens = await Database.from('password_tokens')
+    const passwordTokens = await Database.from('password_tokens')
       .where('expired_at', '<', new Date())
       .delete()
 
-    this.logger.info(`${deletedPasswordTokens} password tokens deleted`)
+    this.logger.info(`${passwordTokens} password tokens deleted`)
+
+    const invitationTokens = await Invitation.query()
+      .where('expired_at', '<', new Date())
+      .delete()
+
+    this.logger.info(`${invitationTokens} invitations tokens deleted`)
   }
 }

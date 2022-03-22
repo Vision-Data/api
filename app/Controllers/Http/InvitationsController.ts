@@ -38,6 +38,13 @@ export default class InvitationsController {
         .send({ error: 'User already added in workspace' })
     }
 
+    // Delete existing invitation
+    await Invitation.query()
+      .where('workspace_id', workspace.id)
+      .where('user_id', user.id)
+      .where('expired_at', '>', new Date())
+      .delete()
+
     const invitation = await Invitation.create({
       userId: user.id,
       workspaceId: workspace.id,
