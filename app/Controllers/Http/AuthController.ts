@@ -1,3 +1,4 @@
+import Route from '@ioc:Adonis/Core/Route'
 import Ws from 'App/Services/Ws'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
@@ -89,7 +90,11 @@ export default class AuthController {
       token: uuidv4(),
     })
 
-    await new ResetPasswordMailer(user, passwordToken.token).sendLater()
+    const url = Route.makeUrl('resetPassword', {
+      token: passwordToken.token,
+    })
+
+    await new ResetPasswordMailer(user, url).sendLater()
 
     response.status(204)
   }

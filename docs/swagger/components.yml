@@ -132,3 +132,105 @@ components:
           type: string
           description: The user's password
           example: supersecretpassword
+
+    CreateWorkspace:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The workspace name
+          example: My Workspace
+          required: true
+        logo:
+          type: string
+          description: The workspace logo URL
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
+          required: false
+        color:
+          type: string
+          description: Whether the workspace is public or not
+          example: '#ff0000'
+          required: false
+
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The workspace's unique identifier.
+          example: 5f1d7999-05d2-4b45-94bb-126bd27a5011
+        name:
+          type: string
+          description: The workspace name
+          example: My Workspace
+        color:
+          type: string
+          description: The workspace color (accepts only hexadecimal color values)
+          example: '#ff0000'
+        logo:
+          type: string
+          description: The workspace logo URL
+          example: https://avatars0.githubusercontent.com/u/1234567?v=4
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the workspace was created.
+          example: 2020-08-20T15:00:00Z
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the workspace was last updated.
+          example: 2020-08-20T15:00:00Z
+        users:
+          $ref: '#/components/schemas/User'
+
+    WorkspacePaginated:
+      type: object
+      properties:
+        meta:
+          type: object
+          $ref: '#/components/schemas/MetaPaginated'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
+
+    MetaPaginated:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items.
+          example: 10
+        per_page:
+          type: integer
+          description: The number of items per page.
+          example: 10
+        current_page:
+          type: integer
+          description: The current page.
+          example: 1
+        last_page:
+          type: integer
+          description: The last page.
+          example: 2
+        first_page:
+          type: integer
+          description: The first page.
+          example: 1
+        first_page_url:
+          type: string
+          description: The first page URL.
+          example: /?page=1
+        last_page_url:
+          type: string
+          description: The last page URL.
+          example: /?page=2
+        next_page_url:
+          type: string
+          description: The next page URL.
+          example: /?page=2
+        previous_page_url:
+          type: string
+          description: The previous page URL.
+          example: null
