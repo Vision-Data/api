@@ -16,7 +16,7 @@ validator.rule(
       )
     }
   },
-  (options, type, subtype) => {
+  (_options, _type, subtype) => {
     if (subtype !== 'string') {
       throw new Error(
         '"hexColor" rule can only be used with a string schema type'
