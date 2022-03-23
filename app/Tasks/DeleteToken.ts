@@ -3,6 +3,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Invitation from 'App/Models/Invitation'
 
 export default class DeleteToken extends BaseTask {
+  logger: any
   public static get schedule() {
     return '* * * * *'
   }
