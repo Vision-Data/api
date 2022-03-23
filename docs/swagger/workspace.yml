@@ -7,11 +7,13 @@
     security:
       - ApiKeyAuth: []
     operationId: getWorkspaces
-    query:
+    parameters:
       - name: page
-        type: integer
-        description: Page number
-        default: 1
+        in: query
+        description: Page number of the results to fetch.
+        required: false
+        schema:
+          type: integer
     responses:
       200:
         description: A list of workspaces
@@ -98,7 +100,7 @@
     operationId: updateWorkspace
     parameters:
       - in: path
-        name: workspace_id
+        name: workspaceId
         description: Workspace ID
         required: true
         schema:
@@ -140,7 +142,7 @@
     operationId: deleteWorkspace
     parameters:
       - in: path
-        name: workspace_id
+        name: workspaceId
         description: Workspace ID
         required: true
         schema:
@@ -168,7 +170,7 @@
     operationId: inviteUserToWorkspace
     parameters:
       - in: path
-        name: workspace_id
+        name: workspaceId
         description: Workspace ID
         required: true
         schema:
@@ -179,7 +181,7 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Invitation'
+            $ref: '#/components/schemas/InvitationUser'
     responses:
       204:
         description: Invitation
@@ -205,13 +207,13 @@
     operationId: acceptInvitationToWorkspace
     parameters:
       - in: path
-        name: workspace_id
+        name: workspaceId
         description: Workspace ID
         required: true
         schema:
           type: string
       - in: path
-        name: invitation_id
+        name: invitationId
         description: Invitation ID
         required: true
         schema:
@@ -237,13 +239,13 @@
     operationId: removeUserFromWorkspace
     parameters:
       - in: path
-        name: workspace_id
+        name: workspaceId
         description: Workspace ID
         required: true
         schema:
           type: string
       - in: path
-        name: user_id
+        name: userId
         description: User ID
         required: true
         schema:

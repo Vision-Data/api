@@ -1,11 +1,8 @@
 components:
   securitySchemes:
-    apiKeyAuth:
+    ApiKeyAuth:
       type: http
-      description: JWT Authorization header using the Bearer scheme.
       scheme: bearer
-      bearerFormat: JWT
-      in: header
   schemas:
     Auth:
       type: object
@@ -140,17 +137,16 @@ components:
           type: string
           description: The workspace name
           example: My Workspace
-          required: true
         logo:
           type: string
           description: The workspace logo URL
           example: https://avatars0.githubusercontent.com/u/1234567?v=4
-          required: false
         color:
           type: string
           description: Whether the workspace is public or not
           example: '#ff0000'
-          required: false
+      required:
+        - name
 
     Workspace:
       type: object
@@ -234,3 +230,11 @@ components:
           type: string
           description: The previous page URL.
           example: null
+
+    InvitationUser:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address
+          example: john@doe.com
