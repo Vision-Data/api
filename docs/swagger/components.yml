@@ -234,3 +234,11 @@ components:
           type: string
           description: The previous page URL.
           example: null
+
+    InvitationUser:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address
+          example: john@doe.com
