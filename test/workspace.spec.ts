@@ -13,7 +13,7 @@ let user
 
 const createWorkspace = async (
   user,
-  data = {
+  data: any = {
     name: 'My amzing workspace',
     logo: 'http://google.com',
     color: '#ffffff',
@@ -43,7 +43,8 @@ test.group('Get workspaces', (group) => {
   })
 
   test('it should return list of workspaces', async (assert) => {
-    const workspace = await createWorkspace(user)
+
+    await createWorkspace(user)
 
     const { body } = await supertest(BASE_URL)
       .get('/workspaces')
