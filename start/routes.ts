@@ -33,7 +33,9 @@ Route.post('logout', 'AuthController.logout').middleware('auth')
 
 Route.group(() => {
   Route.post('/reset', 'AuthController.sendResetLink')
-  Route.post('/reset/:token', 'AuthController.resetPassword')
+  Route.post('/reset/:token', 'AuthController.resetPassword').as(
+    'resetPassword'
+  )
 }).prefix('password')
 
 /* Users */
@@ -44,3 +46,18 @@ Route.group(() => {
 })
   .prefix('/users')
   .middleware('auth')
+
+/* Workspaces */
+Route.group(() => {
+  Route.resource('workspaces', 'WorkspacesController').apiOnly()
+  Route.post('workspaces/:id/invitations', 'InvitationsController.store')
+  Route.post(
+    'workspaces/:id/invitations/:invitationId',
+    'InvitationsController.validate'
+  ).as('validateInvitation')
+
+  Route.delete(
+    'workspaces/:id/users/:userId',
+    'WorkspacesController.removeUser'
+  )
+}).middleware('auth')

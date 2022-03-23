@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class PasswordTokens extends BaseSchema {
-  protected tableName = 'password_tokens'
+export default class Workspaces extends BaseSchema {
+  protected tableName = 'workspaces'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
@@ -10,23 +10,17 @@ export default class PasswordTokens extends BaseSchema {
         .primary()
         .defaultTo(this.db.rawQuery('gen_random_uuid()').knexQuery)
 
-      table
-        .uuid('user_id')
-        .references('id')
-        .inTable('users')
-        .onDelete('CASCADE')
-        .notNullable()
+      table.string('name').notNullable()
 
-      table.uuid('token').notNullable().index()
+      table.json('environment_variables').nullable()
+      table.text('logo').nullable()
+      table.string('color').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
       table.timestamp('created_at', { useTz: true }).notNullable()
-      table
-        .timestamp('expired_at', { useTz: true })
-        .notNullable()
-        .defaultTo(this.db.rawQuery(`NOW() + INTERVAL '10 minutes'`).knexQuery)
+      table.timestamp('updated_at', { useTz: true }).notNullable()
     })
   }
 

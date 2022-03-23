@@ -5,10 +5,11 @@ export const createUser = async (user) => {
   return await UserFactory.merge(user).create()
 }
 
-export const login = async (baseUrl) => {
+export const login = async (baseUrl, userInfo = {}) => {
   const user = await createUser({
     fullName: 'John Doe',
     email: 'john@doe.com',
+    ...userInfo,
   })
 
   const { body } = await supertest(baseUrl).post('/login').send({

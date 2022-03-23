@@ -1,7 +1,7 @@
 <mjml>
     <mj-head>
-      <mj-title>Réinitialisation du mot de passe</mj-title>
-      <mj-preview>Vous avez oublié votre mot de passe. Pour le changer, veuillez cliquer sur le bouton.</mj-preview>
+      <mj-title>Invitation - {{ workspace.name }}</mj-title>
+      <mj-preview>Acceptez l'invitation du workspace {{ workspace.name }}</mj-preview>
       <mj-attributes>
         <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-all>
         <mj-text font-weight="400" font-size="16px" color="#000000" line-height="24px" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-text>
@@ -33,20 +33,20 @@
         <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px">
           <mj-column width="100%">
             <mj-text color="#212b35" font-weight="bold" font-size="20px">
-              Réinitialisation de votre mot de passe
+              Invitation - {{ workspace.name }}
             </mj-text>
             <mj-text color="#637381" font-size="16px">
               Bonjour {{ user.fullName }},
             </mj-text>
             <mj-text color="#637381" font-size="16px">
-              Vous avez oublié votre mot de passe. Pour le changer, veuillez cliquer sur le bouton ci-dessous.
+              Vous venez d'être invité sur le workspace <strong>{{ workspace.name }}</strong>.
             </mj-text>
   
             <mj-button background-color="#FE9430" align="center" color="#ffffff" font-size="17px" font-weight="bold" href="https://app.vision-data.io{{url}}" >
-              Cliquez ici pour changer votre mot de passe
+              Cliquez ici pour accepter l'invitation
             </mj-button>
             <mj-text color="#637381" font-size="16px" padding-top="30px">
-              Si vous rencontrez des problèmes pour accéder à la réinitialisation de votre mot de passe <a class="text-link" href="https://app.vision-data.io{{url}}">cliquez ici</a>.
+              Si vous rencontrez des problèmes pour accepter l'invitation <a class="text-link" href="https://app.vision-data.io{{url}}">cliquez ici</a>.
             </mj-text>
             <mj-text color="#637381" font-size="16px" padding-bottom="0">
               L'équipe VisionData,

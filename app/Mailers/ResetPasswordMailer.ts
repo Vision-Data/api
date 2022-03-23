@@ -4,14 +4,14 @@ import View from '@ioc:Adonis/Core/View'
 import mjml from 'mjml'
 
 export default class ResetPasswordMailer extends BaseMailer {
-  constructor(private user: User, private token: string) {
+  constructor(private user: User, private url: string) {
     super()
   }
 
   public html = mjml(
     View.renderSync('emails/reset-password', {
       user: this.user,
-      token: this.token,
+      url: this.url,
     })
   ).html
 
