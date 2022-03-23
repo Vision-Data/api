@@ -43,6 +43,7 @@ test.group('Get workspaces', (group) => {
   })
 
   test('it should return list of workspaces', async (assert) => {
+
     await createWorkspace(user)
 
     const { body } = await supertest(BASE_URL)
@@ -77,7 +78,7 @@ test.group('Create a workspace', (group) => {
   test('it should that return name is too short', async (assert) => {
     const { body } = await createWorkspace(user, {
       name: 'a',
-      logo: '',
+      logo: null,
       color: null,
     })
 
