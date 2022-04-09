@@ -2,7 +2,7 @@ import { login, createUser } from './utils'
 import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
-import faker from 'faker'
+import faker from '@faker-js/faker'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 let user

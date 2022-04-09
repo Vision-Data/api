@@ -4,7 +4,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import test from 'japa'
 import supertest from 'supertest'
 import { login } from './utils'
-import faker from 'faker'
+import faker from '@faker-js/faker'
 import { createUser } from './utils'
 import { DateTime } from 'luxon'
 
@@ -43,7 +43,6 @@ test.group('Get workspaces', (group) => {
   })
 
   test('it should return list of workspaces', async (assert) => {
-
     await createWorkspace(user)
 
     const { body } = await supertest(BASE_URL)
