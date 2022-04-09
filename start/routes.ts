@@ -29,7 +29,7 @@ Route.get('/:provider/callback', 'AuthController.handleProviderCallback')
 Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
 
-Route.post('logout', 'AuthController.logout').middleware('auth')
+Route.post('logout', 'AuthController.logout')
 
 Route.group(() => {
   Route.post('/reset', 'AuthController.sendResetLink')
