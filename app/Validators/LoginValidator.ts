@@ -5,7 +5,8 @@ export default class LoginValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    email: schema.string({ trim: true }, [
+    email: schema.string([
+      rules.trim(),
       rules.email(),
       rules.exists({
         table: 'users',

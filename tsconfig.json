@@ -35,7 +35,8 @@
       "adonis5-scheduler",
       "@adonisjs/mail",
       "@adonisjs/view",
-      "@adonisjs/bouncer"
+      "@adonisjs/bouncer",
+      "@japa/preset-adonis/build/adonis-typings"
     ]
   }
 }

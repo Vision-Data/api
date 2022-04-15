@@ -20,12 +20,6 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    {
-      "file": "./start/validator",
-      "environment": [
-        "web"
-      ]
-    },
     "./start/bouncer"
   ],
   "providers": [
@@ -48,5 +42,19 @@
       "pattern": "resources/views/**/*.edge",
       "reloadServer": false
     }
+  ],
+  "tests": {
+    "suites": [
+      {
+        "name": "functional",
+        "files": [
+          "tests/functional/**/*.spec(.ts|.js)"
+        ],
+        "timeout": 60000
+      }
+    ]
+  },
+  "testProviders": [
+    "@japa/preset-adonis/TestsProvider"
   ]
 }
