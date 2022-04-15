@@ -5,11 +5,13 @@ export default class UpdateUserValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    full_name: schema.string({ trim: true }, [
+    full_name: schema.string([
+      rules.trim(),
       rules.minLength(4),
       rules.maxLength(50),
     ]),
-    email: schema.string({ trim: true }, [
+    email: schema.string([
+      rules.trim(),
       rules.email(),
       rules.unique({
         table: 'users',
@@ -17,7 +19,7 @@ export default class UpdateUserValidator {
         whereNot: { id: this.ctx?.auth?.user?.id },
       }),
     ]),
-    avatar_url: schema.string({ trim: true }, [rules.url()]),
+    avatar_url: schema.string([rules.trim(), rules.url()]),
   })
 
   public messages = {

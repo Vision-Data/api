@@ -24,7 +24,8 @@ export default class ResetPasswordLinkValidator {
    *    ```
    */
   public schema = schema.create({
-    email: schema.string({ trim: true }, [
+    email: schema.string([
+      rules.trim(),
       rules.email(),
       rules.exists({
         table: 'users',
