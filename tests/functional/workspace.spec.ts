@@ -1,3 +1,4 @@
+import { PaginationEnum } from './../../app/Enums/PaginationEnum'
 import Invitation from 'App/Models/Invitation'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
@@ -34,10 +35,13 @@ test.group('Get workspaces', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('it should return list of workspaces', async ({ client, assert }) => {
+  test('it should return list of workspaces with default limit page', async ({
+    client,
+    assert,
+  }) => {
     await createWorkspace(client, user)
 
-    const response = await client.get('/workspaces').loginAs(user)
+    const response = await client.get(`/workspaces`).loginAs(user)
 
     assert.equal(response.body().data.length, 1)
     assert.properties(response.body(), ['data', 'meta'])
@@ -51,7 +55,33 @@ test.group('Get workspaces', (group) => {
       'updated_at',
       'environment_variables',
     ])
+    assert.equal(response.body().meta.per_page, PaginationEnum.DEFAULT_LIMIT)
   })
+
+  test('it should return list of workspaces with another limit value', async ({
+    client,
+    assert,
+  }, limit) => {
+    await createWorkspace(client, user)
+
+    const response = await client
+      .get(`/workspaces?limit=${limit}`)
+      .loginAs(user)
+
+    assert.equal(response.body().data.length, 1)
+    assert.properties(response.body(), ['data', 'meta'])
+    assert.properties(response.body().data[0], [
+      'id',
+      'name',
+      'logo',
+      'color',
+      'users',
+      'created_at',
+      'updated_at',
+      'environment_variables',
+    ])
+    assert.equal(response.body().meta.per_page, limit)
+  }).with([20, 100, 2])
 })
 
 test.group('Create a workspace', (group) => {

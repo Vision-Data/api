@@ -7,12 +7,13 @@ import WorkspaceValidator from 'App/Validators/WorkspaceValidator'
 export default class WorkspacesController {
   public async index({ auth, request }: HttpContextContract) {
     const page = request.input('page', PaginationEnum.DEFAULT_PAGE)
+    const limit = request.input('limit', PaginationEnum.DEFAULT_LIMIT)
 
     return await auth
       .user!.related('workspaces')
       .query()
       .preload('users')
-      .paginate(page, PaginationEnum.DEFAULT_LIMIT)
+      .paginate(page, limit)
   }
 
   public async store({ request, auth }: HttpContextContract) {
