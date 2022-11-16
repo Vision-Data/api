@@ -7,6 +7,12 @@
 
 import { CorsConfig } from '@ioc:Adonis/Core/Cors'
 
+const ALLOWED_ORIGINS = [
+  'https://app.vision-data.io',
+  'https://staging.vision-data.io',
+  'http://localhost:8080',
+]
+
 const corsConfig: CorsConfig = {
   /*
   |--------------------------------------------------------------------------
@@ -44,7 +50,12 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['vision-data.io', 'netlify.app', 'http://localhost:8080'],
+  origin: (requestOrigin: string) => {
+    return (
+      ALLOWED_ORIGINS.includes(requestOrigin) ||
+      requestOrigin.includes('staging-app-vision.netlify.app')
+    )
+  },
 
   /*
   |--------------------------------------------------------------------------
