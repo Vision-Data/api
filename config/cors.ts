@@ -44,7 +44,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['https://app.vision-data.io', 'http://localhost:8080'],
+  origin: ['https://*.vision-data.io', 'http://localhost:8080'],
 
   /*
   |--------------------------------------------------------------------------
