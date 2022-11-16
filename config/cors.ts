@@ -9,7 +9,7 @@ import { CorsConfig } from '@ioc:Adonis/Core/Cors'
 
 const ALLOWED_ORIGINS = [
   'https://app.vision-data.io',
-  'https://staging.vision-data.io',
+  'https://staging.app.vision-data.io',
   'http://localhost:8080',
 ]
 
