@@ -1,5 +1,4 @@
 import Route from '@ioc:Adonis/Core/Route'
-import Ws from 'App/Services/Ws'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import CreateUserValidator from 'App/Validators/CreateUserValidator'
@@ -40,16 +39,19 @@ export default class AuthController {
         }
       )
 
-      const token = await auth.use('api').generate(user, { expiresIn: '1hour' })
-      const tokenAndUserInformations = { token: token.token, user: token.user }
+      const token = await auth
+        .use('api')
+        .generate(user, { expiresIn: '1 year' })
 
-      Ws.io.emit('login', tokenAndUserInformations)
+      const encodedToken = Buffer.from(token.token).toString('base64')
+      const encodedUser = Buffer.from(JSON.stringify(token.user)).toString(
+        'base64'
+      )
 
-      return tokenAndUserInformations
+      return response.redirect(
+        `${process.env.HOST_APP}/login?token=${encodedToken}&user=${encodedUser}`
+      )
     } catch {
-      const error = { error: 'An error occurred while logging in' }
-      Ws.io.emit('errorLogin', error)
-
       response.status(400).send({ error: 'An error occurred while logging in' })
     }
   }
@@ -59,7 +61,7 @@ export default class AuthController {
     const user = await User.create(payload)
 
     const token = await auth.attempt(user.email, payload.password, {
-      expiresIn: '1hour',
+      expiresIn: '1 year',
     })
 
     return { token: token.token, user: token.user }
@@ -68,7 +70,7 @@ export default class AuthController {
   public async login({ request, auth }: HttpContextContract) {
     const payload = await request.validate(LoginValidator)
     const token = await auth.attempt(payload.email, payload.password, {
-      expiresIn: '1hour',
+      expiresIn: '1 year',
     })
 
     return { token: token.token, user: token.user }
