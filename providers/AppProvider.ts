@@ -12,10 +12,6 @@ export default class AppProvider {
   }
 
   public async ready() {
-    if (this.app.environment === 'web') {
-      await import('../start/socket')
-    }
-
     // Run scheduler at startup
     const scheduler = this.app.container.use('Adonis/Addons/Scheduler')
     scheduler.run()
