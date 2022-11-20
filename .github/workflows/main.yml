@@ -55,6 +55,7 @@ jobs:
           SMTP_USERNAME: ${{secrets.SMTP_USERNAME}}
           SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD}}
           CACHE_VIEWS: false
+          HOST_APP: http://localhost
 
   deployment:
     if: github.ref == 'refs/heads/main'
