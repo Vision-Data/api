@@ -5,7 +5,7 @@ import Workspace from 'App/Models/Workspace'
 import mjml from 'mjml'
 
 export default class InvitationMailer extends BaseMailer {
-  constructor (
+  constructor(
     private user: User,
     private workspace: Workspace,
     private url: string
@@ -21,7 +21,7 @@ export default class InvitationMailer extends BaseMailer {
     })
   ).html
 
-  public prepare (message: MessageContract) {
+  public prepare(message: MessageContract) {
     message
       .subject(`Vision - Invitation sur le workspace ${this.workspace.name}`)
       .from('visiondata@mail.com')

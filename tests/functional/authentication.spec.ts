@@ -152,7 +152,7 @@ test.group('Login', (group) => {
     assert.equal(response.body().errors[0].message, 'Invalid email')
   })
 
-  test('it should return that email doesn\'t exists', async ({
+  test("it should return that email doesn't exists", async ({
     client,
     assert,
   }) => {

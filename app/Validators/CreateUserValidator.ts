@@ -2,7 +2,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CreateUserValidator {
-  constructor (protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     full_name: schema.string([
@@ -22,10 +22,12 @@ export default class CreateUserValidator {
   })
 
   public messages = {
-    required: 'This field is required',
-    minLength: 'This field must be at least {{ options.minLength }} characters',
+    'required': 'This field is required',
+    'minLength':
+      'This field must be at least {{ options.minLength }} characters',
     'email.unique': 'This email already exists',
-    maxLength: 'This field must be at most {{ options.maxLength }} characters',
-    email: 'Invalid email',
+    'maxLength':
+      'This field must be at most {{ options.maxLength }} characters',
+    'email': 'Invalid email',
   }
 }
