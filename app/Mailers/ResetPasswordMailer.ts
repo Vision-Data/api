@@ -4,7 +4,7 @@ import View from '@ioc:Adonis/Core/View'
 import mjml from 'mjml'
 
 export default class ResetPasswordMailer extends BaseMailer {
-  constructor(private user: User, private url: string) {
+  constructor (private user: User, private url: string) {
     super()
   }
 
@@ -15,7 +15,7 @@ export default class ResetPasswordMailer extends BaseMailer {
     })
   ).html
 
-  public prepare(message: MessageContract) {
+  public prepare (message: MessageContract) {
     message
       .subject('Vision - Réinitialisation du mot de passe')
       .from('visiondata@mail.com')

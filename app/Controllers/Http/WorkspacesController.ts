@@ -5,7 +5,7 @@ import Workspace from 'App/Models/Workspace'
 import WorkspaceValidator from 'App/Validators/WorkspaceValidator'
 
 export default class WorkspacesController {
-  public async index({ auth, request }: HttpContextContract) {
+  public async index ({ auth, request }: HttpContextContract) {
     const page = request.input('page', PaginationEnum.DEFAULT_PAGE)
 
     return await auth
@@ -15,7 +15,7 @@ export default class WorkspacesController {
       .paginate(page, PaginationEnum.DEFAULT_LIMIT)
   }
 
-  public async store({ request, auth }: HttpContextContract) {
+  public async store ({ request, auth }: HttpContextContract) {
     const payload = await request.validate(WorkspaceValidator)
 
     const workspace = await Workspace.create(payload)
@@ -25,7 +25,7 @@ export default class WorkspacesController {
     return workspace
   }
 
-  public async show({ auth, params }: HttpContextContract) {
+  public async show ({ auth, params }: HttpContextContract) {
     return await Workspace.query()
       .preload('users')
       .innerJoin(
@@ -38,7 +38,7 @@ export default class WorkspacesController {
       .firstOrFail()
   }
 
-  public async update({ bouncer, auth, params, request }: HttpContextContract) {
+  public async update ({ bouncer, auth, params, request }: HttpContextContract) {
     const workspace = await Workspace.query()
       .preload('users', (query) => query.wherePivot('user_id', auth.user!.id))
       .innerJoin(
@@ -58,7 +58,7 @@ export default class WorkspacesController {
     return workspace
   }
 
-  public async destroy({
+  public async destroy ({
     bouncer,
     auth,
     params,
@@ -82,7 +82,7 @@ export default class WorkspacesController {
     response.status(204)
   }
 
-  public async removeUser({
+  public async removeUser ({
     params,
     auth,
     bouncer,

@@ -10,11 +10,11 @@ import ResetPasswordMailer from 'App/Mailers/ResetPasswordMailer'
 import PasswordValidator from 'App/Validators/PasswordValidator'
 
 export default class AuthController {
-  public async redirectToProvider({ params, ally }: HttpContextContract) {
+  public async redirectToProvider ({ params, ally }: HttpContextContract) {
     return ally.use(params.provider).redirect()
   }
 
-  public async handleProviderCallback({
+  public async handleProviderCallback ({
     params,
     ally,
     auth,
@@ -56,7 +56,7 @@ export default class AuthController {
     }
   }
 
-  public async register({ request, auth }: HttpContextContract) {
+  public async register ({ request, auth }: HttpContextContract) {
     const payload = await request.validate(CreateUserValidator)
     const user = await User.create(payload)
 
@@ -67,7 +67,7 @@ export default class AuthController {
     return { token: token.token, user: token.user }
   }
 
-  public async login({ request, auth }: HttpContextContract) {
+  public async login ({ request, auth }: HttpContextContract) {
     const payload = await request.validate(LoginValidator)
     const token = await auth.attempt(payload.email, payload.password, {
       expiresIn: '1 year',
@@ -76,13 +76,13 @@ export default class AuthController {
     return { token: token.token, user: token.user }
   }
 
-  public async logout({ auth, response }: HttpContextContract) {
+  public async logout ({ auth, response }: HttpContextContract) {
     await auth.use('api').revoke()
 
     return response.status(204)
   }
 
-  public async sendResetLink({ request, response }: HttpContextContract) {
+  public async sendResetLink ({ request, response }: HttpContextContract) {
     const payload = await request.validate(ResetPasswordLinkValidator)
 
     const user = await User.findByOrFail('email', payload.email)
@@ -101,7 +101,7 @@ export default class AuthController {
     response.status(204)
   }
 
-  public async resetPassword({
+  public async resetPassword ({
     request,
     response,
     params,

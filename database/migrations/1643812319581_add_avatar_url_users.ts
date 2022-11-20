@@ -1,17 +1,17 @@
-import BaseSchema from "@ioc:Adonis/Lucid/Schema";
+import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class AddAvatarUrlUsers extends BaseSchema {
-  protected tableName = "users";
+  protected tableName = 'users'
 
-  public async up() {
+  public async up () {
     this.schema.alterTable(this.tableName, (table) => {
-      table.string("avatar_url");
-    });
+      table.string('avatar_url')
+    })
   }
 
-  public async down() {
+  public async down () {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn("avatar_url");
-    });
+      table.dropColumn('avatar_url')
+    })
   }
 }

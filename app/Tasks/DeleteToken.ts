@@ -4,18 +4,18 @@ import Invitation from 'App/Models/Invitation'
 
 export default class DeleteToken extends BaseTask {
   logger: any
-  public static get schedule() {
+  public static get schedule () {
     return '* * * * *'
   }
   /**
    * Set enable use .lock file for block run retry task
    * Lock file save to `build/tmpTaskLock`
    */
-  public static get useLock() {
+  public static get useLock () {
     return false
   }
 
-  public async handle() {
+  public async handle () {
     const apiTokens = await Database.from('api_tokens')
       .where('expires_at', '<', new Date())
       .delete()

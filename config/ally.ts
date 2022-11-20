@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from "@ioc:Adonis/Core/Env";
-import { AllyConfig } from "@ioc:Adonis/Addons/Ally";
+import Env from '@ioc:Adonis/Core/Env'
+import { AllyConfig } from '@ioc:Adonis/Addons/Ally'
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +24,10 @@ const allyConfig: AllyConfig = {
 	|--------------------------------------------------------------------------
 	*/
   github: {
-    driver: "github",
-    clientId: Env.get("GITHUB_CLIENT_ID"),
-    clientSecret: Env.get("GITHUB_CLIENT_SECRET"),
-    callbackUrl: Env.get("GITHUB_CALLBACK_URL"),
+    driver: 'github',
+    clientId: Env.get('GITHUB_CLIENT_ID'),
+    clientSecret: Env.get('GITHUB_CLIENT_SECRET'),
+    callbackUrl: Env.get('GITHUB_CALLBACK_URL'),
   },
   /*
 	|--------------------------------------------------------------------------
@@ -35,11 +35,11 @@ const allyConfig: AllyConfig = {
 	|--------------------------------------------------------------------------
 	*/
   google: {
-    driver: "google",
-    clientId: Env.get("GOOGLE_CLIENT_ID"),
-    clientSecret: Env.get("GOOGLE_CLIENT_SECRET"),
-    callbackUrl: Env.get("GOOGLE_CALLBACK_URL"),
+    driver: 'google',
+    clientId: Env.get('GOOGLE_CLIENT_ID'),
+    clientSecret: Env.get('GOOGLE_CLIENT_SECRET'),
+    callbackUrl: Env.get('GOOGLE_CALLBACK_URL'),
   },
-};
+}
 
-export default allyConfig;
+export default allyConfig

@@ -4,7 +4,7 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class WorkspaceUsers extends BaseSchema {
   protected tableName = 'workspace_users'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table
         .uuid('user_id')
@@ -35,7 +35,7 @@ export default class WorkspaceUsers extends BaseSchema {
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }

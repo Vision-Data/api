@@ -3,7 +3,7 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class PasswordTokens extends BaseSchema {
   protected tableName = 'password_tokens'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table
         .uuid('id')
@@ -26,11 +26,11 @@ export default class PasswordTokens extends BaseSchema {
       table
         .timestamp('expired_at', { useTz: true })
         .notNullable()
-        .defaultTo(this.db.rawQuery(`NOW() + INTERVAL '10 minutes'`).knexQuery)
+        .defaultTo(this.db.rawQuery('NOW() + INTERVAL \'10 minutes\'').knexQuery)
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }
