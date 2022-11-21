@@ -520,7 +520,7 @@ test.group('Validate an invitation to a workspace', (group) => {
   test('it should return workspace not found', async ({ client, assert }) => {
     const response = await client
       .post(
-        `/workspaces/8a970a53-c739-40cf-8c8c-3b2416852e7f/invitations/8a970a53-c739-40cf-8c8c-3b2416852e7f`
+        '/workspaces/8a970a53-c739-40cf-8c8c-3b2416852e7f/invitations/8a970a53-c739-40cf-8c8c-3b2416852e7f'
       )
       .loginAs(user)
 

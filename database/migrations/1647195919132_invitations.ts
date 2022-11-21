@@ -28,7 +28,7 @@ export default class Invitations extends BaseSchema {
       table
         .timestamp('expired_at', { useTz: true })
         .notNullable()
-        .defaultTo(this.db.rawQuery(`NOW() + INTERVAL '1 hour'`).knexQuery)
+        .defaultTo(this.db.rawQuery("NOW() + INTERVAL '1 hour'").knexQuery)
     })
   }
 

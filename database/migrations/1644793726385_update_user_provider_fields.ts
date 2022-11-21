@@ -9,5 +9,9 @@ export default class UpdateUserProviderFields extends BaseSchema {
     })
   }
 
-  public async down() {}
+  public async down() {
+    this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('provider')
+    })
+  }
 }

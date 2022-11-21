@@ -139,7 +139,7 @@ test.group('Change password', (group) => {
     assert,
   }) => {
     const response = await client
-      .put(`/users/me/password`)
+      .put('/users/me/password')
       .loginAs(user)
       .json({
         password: faker.lorem.words(50),
@@ -156,7 +156,7 @@ test.group('Change password', (group) => {
     client,
     assert,
   }) => {
-    const response = await client.put(`/users/me/password`).loginAs(user).json({
+    const response = await client.put('/users/me/password').loginAs(user).json({
       password: 'pass',
     })
 
@@ -171,7 +171,7 @@ test.group('Change password', (group) => {
     client,
     assert,
   }) => {
-    const response = await client.put(`/users/me/password`).loginAs(user).json({
+    const response = await client.put('/users/me/password').loginAs(user).json({
       password: 'newPassw0rd',
     })
 

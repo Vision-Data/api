@@ -26,7 +26,7 @@ export default class PasswordTokens extends BaseSchema {
       table
         .timestamp('expired_at', { useTz: true })
         .notNullable()
-        .defaultTo(this.db.rawQuery(`NOW() + INTERVAL '10 minutes'`).knexQuery)
+        .defaultTo(this.db.rawQuery("NOW() + INTERVAL '10 minutes'").knexQuery)
     })
   }
 
