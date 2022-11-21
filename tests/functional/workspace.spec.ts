@@ -1,7 +1,7 @@
 import Invitation from 'App/Models/Invitation'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
-import faker from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import { createUser } from '../utils'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import { DateTime } from 'luxon'

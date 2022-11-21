@@ -4,7 +4,7 @@ import Workspace from 'App/Models/Workspace'
 
 export const WorkspaceFactory = Factory.define(Workspace, ({ faker }) => {
   return {
-    name: faker.name.findName(),
+    name: faker.name.fullName(),
     environmentVariables: { data: [] },
     logo: faker.image.imageUrl(),
     color: '#ffffff',
