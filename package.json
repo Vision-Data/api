@@ -44,7 +44,7 @@
     "@adonisjs/view": "^6.2.0",
     "adonis5-scheduler": "^2.0.2",
     "adonis5-swagger": "1.4.1",
-    "luxon": "^3.1.0",
+    "luxon": "^3.2.1",
     "mjml": "^4.13.0",
     "pg": "^8.8.0",
     "phc-bcrypt": "^1.0.8",
