@@ -9,8 +9,10 @@ export default class PasswordValidator {
   })
 
   public messages = {
-    required: 'This field is required',
-    minLength: 'This field must be at least {{ options.minLength }} characters',
-    maxLength: 'This field must be at most {{ options.maxLength }} characters',
+    required: 'Ce champ est requis',
+    minLength:
+      'Ce champ doit avoir au moins {{ options.minLength }} caractères',
+    maxLength:
+      'Ce champ doit avoir au maximum {{ options.maxLength }} caractères',
   }
 }

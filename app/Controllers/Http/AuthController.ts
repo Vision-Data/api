@@ -52,7 +52,9 @@ export default class AuthController {
         `${process.env.HOST_APP}/login?token=${encodedToken}&user=${encodedUser}`
       )
     } catch {
-      response.status(400).send({ error: 'An error occurred while logging in' })
+      response
+        .status(400)
+        .send({ error: "Une erreur s'est produite lors de la connexion" })
     }
   }
 

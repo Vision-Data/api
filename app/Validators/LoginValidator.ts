@@ -17,10 +17,10 @@ export default class LoginValidator {
   })
 
   public messages = {
-    'required': '{{ field }} is required',
-    'email': 'Invalid email',
-    'email.exists': 'User account with this email does not exist',
+    'required': '{{ field }} est requis',
+    'email': 'Email invalide',
+    'email.exists': "Aucun compte n'est associé à cette adresse email",
     'maxLength':
-      'This field must be at most {{ options.maxLength }} characters',
+      'Ce champ doit avoir au maximum {{ options.maxLength }} caractères',
   }
 }

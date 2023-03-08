@@ -23,13 +23,13 @@ export default class UpdateUserValidator {
   })
 
   public messages = {
-    'required': '{{ field }} is required',
+    'required': '{{ field }} est requis',
     'minLength':
-      'This field must be at least {{ options.minLength }} characters',
+      'Ce champ doit avoir au moins {{ options.minLength }} caractères',
     'maxLength':
-      'This field must be at most {{ options.maxLength }} characters',
-    'email.unique': 'This email already exists',
-    'email': 'Invalid email',
-    'url': 'Invalid URL',
+      'Ce champ doit avoir au maximum {{ options.maxLength }} caractères',
+    'email.unique': 'Cette adresse email est déjà utilisée',
+    'email': 'Email invalide',
+    'url': 'URL invalide',
   }
 }

@@ -13,7 +13,7 @@ export default class CreateInvitationValidator {
   })
 
   public messages = {
-    email: 'Invalid email',
-    exists: 'User account with this email does not exist',
+    email: 'Email invalide',
+    exists: "Aucun compte n'est associé à cette adresse email",
   }
 }

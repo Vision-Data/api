@@ -22,12 +22,12 @@ export default class CreateUserValidator {
   })
 
   public messages = {
-    'required': 'This field is required',
+    'required': 'Ce champ est requis',
     'minLength':
-      'This field must be at least {{ options.minLength }} characters',
-    'email.unique': 'This email already exists',
+      'Ce champ doit avoir au moins {{ options.minLength }} caractères',
+    'email.unique': 'Cette adresse email est déjà utilisée',
     'maxLength':
-      'This field must be at most {{ options.maxLength }} characters',
-    'email': 'Invalid email',
+      'Ce champ doit avoir au maximum {{ options.maxLength }} caractères',
+    'email': 'Email invalide',
   }
 }

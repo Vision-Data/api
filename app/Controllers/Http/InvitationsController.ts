@@ -35,7 +35,7 @@ export default class InvitationsController {
     if (workspace.users.find((user) => user.email === payload.email)) {
       return response
         .status(409)
-        .send({ error: 'User already added in workspace' })
+        .send({ error: "Utilisateur déjà ajouté dans l'espace de travail" })
     }
 
     // Delete existing invitation
@@ -68,7 +68,7 @@ export default class InvitationsController {
       .firstOrFail()
 
     if (invitation.expiredAt < DateTime.now()) {
-      return response.status(410).send({ error: 'Invitation expired' })
+      return response.status(410).send({ error: 'Invitation expirée' })
     }
 
     const workspace = await Workspace.findOrFail(params.id)

@@ -106,13 +106,15 @@ export default class WorkspacesController {
     )
 
     if (!userInWorkspace) {
-      return response.status(404).send({ error: 'User not found in workspace' })
+      return response
+        .status(404)
+        .send({ error: "Utilisateur introuvable dans l'espace de travail" })
     }
 
     if (auth.user!.id === params.userId) {
-      return response
-        .status(400)
-        .send({ error: 'You cannot remove yourself from workspace' })
+      return response.status(400).send({
+        error: "Vous ne pouvez pas vous retirer de l'espace de travail",
+      })
     }
 
     await workspace.related('users').detach([params.userId])
