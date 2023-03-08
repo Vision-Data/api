@@ -18,12 +18,12 @@ export default class WorkspaceValidator {
   })
 
   public messages = {
-    'name.required': 'Workspace name is required',
+    'name.required': 'Le nom du workspace est requis',
     'minLength':
-      'This field must be at least {{ options.minLength }} characters',
+      'Ce champ doit avoir au moins {{ options.minLength }} caractères',
     'maxLength':
-      'This field must be at most {{ options.maxLength }} characters',
-    'logo.url': 'Invalid URL',
-    'color.regex': 'Invalid hexadecimal color',
+      'Ce champ doit avoir au maximum {{ options.maxLength }} caractères',
+    'logo.url': 'URL invalide',
+    'color.regex': 'Couleur invalide',
   }
 }

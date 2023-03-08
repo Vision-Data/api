@@ -73,7 +73,7 @@ test.group('Create a workspace', (group) => {
 
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at least 3 characters'
+      'Ce champ doit avoir au moins 3 caractères'
     )
   })
 
@@ -86,7 +86,7 @@ test.group('Create a workspace', (group) => {
 
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at most 100 characters'
+      'Ce champ doit avoir au maximum 100 caractères'
     )
   })
 
@@ -100,7 +100,7 @@ test.group('Create a workspace', (group) => {
       color: null,
     })
 
-    assert.equal(response.body().errors[0].message, 'Invalid URL')
+    assert.equal(response.body().errors[0].message, 'URL invalide')
   })
 
   test('it should that return color is not hexColor', async ({
@@ -113,7 +113,7 @@ test.group('Create a workspace', (group) => {
       color: 'test',
     })
 
-    assert.equal(response.body().errors[0].message, 'Invalid hexadecimal color')
+    assert.equal(response.body().errors[0].message, 'Couleur invalide')
   })
 
   test('it should that return workspace is successfuly', async ({
@@ -247,7 +247,7 @@ test.group('Update a workspace', (group) => {
 
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at least 3 characters'
+      'Ce champ doit avoir au moins 3 caractères'
     )
   })
 
@@ -265,7 +265,7 @@ test.group('Update a workspace', (group) => {
 
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at most 100 characters'
+      'Ce champ doit avoir au maximum 100 caractères'
     )
   })
 
@@ -284,7 +284,7 @@ test.group('Update a workspace', (group) => {
         color: null,
       })
 
-    assert.equal(response.body().errors[0].message, 'Invalid URL')
+    assert.equal(response.body().errors[0].message, 'URL invalide')
   })
 
   test('it should that return color is not hexColor', async ({
@@ -302,7 +302,7 @@ test.group('Update a workspace', (group) => {
         color: 'test',
       })
 
-    assert.equal(response.body().errors[0].message, 'Invalid hexadecimal color')
+    assert.equal(response.body().errors[0].message, 'Couleur invalide')
   })
 
   test('it should that return workspace updated successfuly', async ({
@@ -445,7 +445,7 @@ test.group('Invite a user in workspace', (group) => {
     )
 
     assert.equal(response.status(), 422)
-    assert.equal(response.body().errors[0].message, 'Invalid email')
+    assert.equal(response.body().errors[0].message, 'Email invalide')
   })
 
   test('it should that return user account not found', async ({
@@ -464,7 +464,7 @@ test.group('Invite a user in workspace', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'User account with this email does not exist'
+      "Aucun compte n'est associé à cette adresse email"
     )
   })
 
@@ -482,7 +482,10 @@ test.group('Invite a user in workspace', (group) => {
     )
 
     assert.equal(response.status(), 409)
-    assert.equal(response.body().error, 'User already added in workspace')
+    assert.equal(
+      response.body().error,
+      "Utilisateur déjà ajouté dans l'espace de travail"
+    )
   })
 
   test('it should that return invitation sent successfuly', async ({
@@ -544,7 +547,7 @@ test.group('Validate an invitation to a workspace', (group) => {
       .loginAs(anotherUser)
 
     assert.equal(response.status(), 410)
-    assert.equal(response.body().error, 'Invitation expired')
+    assert.equal(response.body().error, 'Invitation expirée')
   })
 
   test('it should that return invitation is validated successfuly', async ({

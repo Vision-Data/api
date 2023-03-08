@@ -26,7 +26,7 @@ test.group('Register', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at least 4 characters'
+      'Ce champ doit avoir au moins 4 caractères'
     )
   })
 
@@ -43,7 +43,7 @@ test.group('Register', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at most 50 characters'
+      'Ce champ doit avoir au maximum 50 caractères'
     )
   })
 
@@ -58,7 +58,7 @@ test.group('Register', (group) => {
     })
 
     assert.equal(response.status(), 422)
-    assert.equal(response.body().errors[0].message, 'Invalid email')
+    assert.equal(response.body().errors[0].message, 'Email invalide')
   })
 
   test('it should return that email is already exists', async ({
@@ -76,7 +76,10 @@ test.group('Register', (group) => {
     const response = await client.post('/register').json(user)
 
     assert.equal(response.status(), 422)
-    assert.equal(response.body().errors[0].message, 'This email already exists')
+    assert.equal(
+      response.body().errors[0].message,
+      'Cette adresse email est déjà utilisée'
+    )
   })
 
   test('it should return that password is too short', async ({
@@ -92,7 +95,7 @@ test.group('Register', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at least 8 characters'
+      'Ce champ doit avoir au moins 8 caractères'
     )
   })
 
@@ -109,7 +112,7 @@ test.group('Register', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at most 30 characters'
+      'Ce champ doit avoir au maximum 30 caractères'
     )
   })
 
@@ -149,7 +152,7 @@ test.group('Login', (group) => {
     })
 
     assert.equal(response.status(), 422)
-    assert.equal(response.body().errors[0].message, 'Invalid email')
+    assert.equal(response.body().errors[0].message, 'Email invalide')
   })
 
   test("it should return that email doesn't exists", async ({
@@ -164,7 +167,7 @@ test.group('Login', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'User account with this email does not exist'
+      "Aucun compte n'est associé à cette adresse email"
     )
   })
 
@@ -188,7 +191,7 @@ test.group('Login', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at most 30 characters'
+      'Ce champ doit avoir au maximum 30 caractères'
     )
   })
 
@@ -232,7 +235,7 @@ test.group('Send reset password link', (group) => {
     })
 
     assert.equal(response.status(), 422)
-    assert.equal(response.body().errors[0].message, 'Invalid email')
+    assert.equal(response.body().errors[0].message, 'Email invalide')
   })
 
   test('it should return that email is not found', async ({
@@ -246,7 +249,7 @@ test.group('Send reset password link', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'User account with this email does not exist'
+      "Aucun compte n'est associé à cette adresse email"
     )
   })
 
@@ -336,7 +339,7 @@ test.group('Reset password', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at most 30 characters'
+      'Ce champ doit avoir au maximum 30 caractères'
     )
   })
 
@@ -355,7 +358,7 @@ test.group('Reset password', (group) => {
     assert.equal(response.status(), 422)
     assert.equal(
       response.body().errors[0].message,
-      'This field must be at least 8 characters'
+      'Ce champ doit avoir au moins 8 caractères'
     )
   })
 
