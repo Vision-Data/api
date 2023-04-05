@@ -11,6 +11,7 @@ const ALLOWED_ORIGINS = [
   'https://app.vision-data.io',
   'https://staging.app.vision-data.io',
   'http://localhost:8080',
+  'http://localhost:8081',
 ]
 
 const corsConfig: CorsConfig = {
